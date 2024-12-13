@@ -6,6 +6,7 @@ export const ssr = false;
 
 // Import your app initialization logic
 import { initializeApp } from '../$lib/main';
+import '../$lib/styles/main.css';
 
 // Initialize global logic (e.g., app setup, i18n)
 export const load = async () => {
