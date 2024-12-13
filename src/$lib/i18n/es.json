@@ -1,0 +1,5 @@
+{
+    "welcome": "¡Bienvenido a tu aplicación Tauri!",
+    "greeting": "¡Hola, {name}!",
+    "preview": "avance"
+}
