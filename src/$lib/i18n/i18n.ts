@@ -1,4 +1,4 @@
-import { init, register, getLocaleFromNavigator, waitLocale } from 'svelte-i18n';
+import { init, register, getLocaleFromNavigator, waitLocale, locale } from 'svelte-i18n';
 
 // Register translations
 register('en', () => import('./en.json'));
@@ -14,4 +14,8 @@ export async function loadTranslations() {
 
     // Wait for the locale to load
     await waitLocale();
+}
+
+export async function setLanguage(lang: string) {
+    locale.set(lang);
 }
