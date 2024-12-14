@@ -60,6 +60,18 @@
 
     //let name: String = "User";
 
+    // Reactive variable to store the number of files
+    let fileCount: number = 4; // Default to 4 files
+
+    // Function to generate files
+    function generateFiles(count: number) {
+        if (count < 0) {
+            console.error("Count must be non-negative");
+            return;
+        }
+        fileCount = count;
+    }
+
 
 </script>
 
@@ -111,18 +123,12 @@
         <div class="main">
             <!-- File/Folder Content -->
             <div class="content">
-                <div class="file">
-                    <Icon class="icon" icon="mdi:file-outline" width=60% height=60% />
-                </div>
-                <div class="file">
-                    <Icon class="icon" icon="mdi:file-outline" width=60% height=60% />
-                </div>
-                <div class="file">
-                    <Icon class="icon" icon="mdi:file-outline" width=60% height=60% />
-                </div>
-                <div class="file">
-                    <Icon class="icon" icon="mdi:file-outline" width=60% height=60% />
-                </div>
+                {#each Array(fileCount).fill(0) as _, index}
+                    <div class="file">
+                        <Icon class="icon" icon="mdi:file-outline" width="60%" height="60%" />
+                        <p class="file-name">File fdsfdsfdsfdsfdsfdsdsadsa{index + 1}</p>
+                    </div>
+                {/each}
             </div>
         </div>
         <div class="preview">
