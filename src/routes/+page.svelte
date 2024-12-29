@@ -2,76 +2,33 @@
     import Icon from '@iconify/svelte';
     import { invoke } from '@tauri-apps/api/core';
     import { t } from 'svelte-i18n';
-    //import '../$lib/styles/main.css';
-    //const invoke = window.__TAURI__.invoke;
+    import { onMount } from 'svelte';
+    import { get_dir_info } from '../$lib/get_data';
+
+    let infoBarText = 'Loading...'; // Reactive variable for the info bar
+    let fileCount: number = 0; // Reactive variable for the number of files and folders
     
-    let address_input = document.getElementById("address_in");
-    let search_input = document.getElementById("search_in");
-    let info_bar = document.getElementById("infobar");
+    // Function to fetch directory information
+    async function loadDirInfo() {
+        const dirInfo = await get_dir_info("D:/sqlite3");
+        if (typeof dirInfo === 'object' && dirInfo.dir_sub_files !== undefined && dirInfo.dir_sub_dirs !== undefined) {
+            fileCount = dirInfo.dir_sub_files + dirInfo.dir_sub_dirs;
+            infoBarText = `Files: ${dirInfo.dir_sub_files}, Folders: ${dirInfo.dir_sub_dirs}, Total: ${fileCount}`;
+        } else {
+            infoBarText = 'Error loading directory information.';
+        }
+    }
 
-    //invoke("greet");
-    document.addEventListener("load", function(event) {
-        invoke("request_file_data", { filepath: "D:/sqlite3/30.jpg" });
-        address_input = document.getElementById("address_in");
-        search_input = document.getElementById("search_in");
-        info_bar = document.getElementById("infobar");
-    })
+    // Load directory info on component mount
+    onMount(() => {
+        loadDirInfo();
+    });
 
-    document.addEventListener('contextmenu', function (event) 
-    {
-        invoke("request_file_data", { filepath: "D:/sqlite3/30.jpg" });
+    document.addEventListener('contextmenu', function (event) {
         event.preventDefault(); // Disable the context menu
+
+        get_dir_info("D:/sqlite3");
     });
-
-    document.addEventListener('click', function (event) 
-    {
-        info_bar = document.getElementById("infobar");
-        if (info_bar)
-        {
-            if (document.activeElement === info_bar)
-            {
-                invoke("request_file_data", { filepath: "D:/sqlite3/30.jpg" });
-            }
-            info_bar.innerHTML = "test";
-            console.timeLog("info_bar = test");
-        }
-        if (address_input)
-        {
-            address_input.ariaPlaceholder = "tsee";
-            //address_input.innerHTML = "testest";
-        }
-    });
-
-    address_input = document.getElementById("address_in");
-    if (address_input)
-    {
-        address_input.addEventListener('keydown', function(event) {
-            //event.preventDefault();
-            //const keyboardEvent = event as KeyboardEvent;
-            invoke("request_file_data", { filepath: "D:/sqlite3/30.jpg" });
-            if (event.key === 'Enter') { // Check if the Enter key was pressed
-            }
-        });
-    }
-    else
-    {
-        console.error("no address_input");
-    }
-
-    //let name: String = "User";
-
-    // Reactive variable to store the number of files
-    let fileCount: number = 4; // Default to 4 files
-
-    // Function to generate files
-    function generateFiles(count: number) {
-        if (count < 0) {
-            console.error("Count must be non-negative");
-            return;
-        }
-        fileCount = count;
-    }
-
 
 </script>
 
@@ -126,7 +83,7 @@
                 {#each Array(fileCount).fill(0) as _, index}
                     <div class="file">
                         <Icon class="icon" icon="mdi:file-outline" width="60%" height="60%" />
-                        <p class="file-name">File fdsfdsfdsfdsfdsfdsdsadsa{index + 1}</p>
+                        <p class="file-name">File {index + 1}</p>
                     </div>
                 {/each}
             </div>
@@ -141,6 +98,6 @@
         </div>
     </div>
     <div class="info_bar" id="infobar">
-        fds
+        {infoBarText}
     </div>
 </div>
