@@ -104,10 +104,12 @@ body {
     border-radius: 3px;
 }
 .below_Toolbar {
+    position: relative;
     display: flex;
     flex-direction: row;
     flex: 1; /* Allow this section to grow and fill the remaining space */
     width: 100%;
+    overflow: hidden; /* Prevent overflow of content */
 }
 .sidebar {
     width: 250px;
@@ -117,14 +119,25 @@ body {
     border-right: 1px solid var(--border-color);
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
+.sidebar .item {
+    color: var(--text-color);
+    font-size: larger;
+    margin-bottom: 5px;
+    overflow-x: visible;
+    border-radius: 1px;
+    border: 1px solid transparent;
+}
+.sidebar .item:hover {
+    border-color: var(--border-color);
+}
 .main {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    /*flex-direction: column;*/
     background-color: var(--primary-color);
-    max-height: 100%;
+    overflow: hidden; /* Prevent overflow issues */
+    min-width: 150px;
 }
 .content {
     height: 100%;
@@ -132,20 +145,23 @@ body {
     padding: 10px;
     padding-top: 20px;
     padding-left: 30px;
-    overflow-y: auto;
+    overflow-y: auto; /* Enable vertical scrolling for content */
     display: flex;
-    gap: 20px;
+    gap: 10px;
     flex-wrap: wrap;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start; /* Align items to the top */
     align-content: flex-start;
-    max-height: 100%;
+    max-height: 100%; /* Adjust height to fit below the info bar */
+    scrollbar-color: var(--border-color) var(--primary-color);
+}
+.content::-webkit-scrollbar-thumb:vertical:hover {
+    scrollbar-color: var(--hover-color) var(--primary-color); /* Change thumb color */
 }
 .file {
     width: 100px;
     height: 100px;
     color: var(--text-color);
-    border: 1px solid var(--border-color);
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -157,11 +173,13 @@ body {
     text-align: center; /* Center text inside the file box */
 }
 .file-name {
+    user-select: none;
     overflow: hidden;            /* Hide overflowing text */
     text-overflow: ellipsis;     /* Add ellipsis for overflowing content */
     display: -webkit-box;        /* Enable webkit box layout */
     -webkit-box-orient: vertical; /* Set box orientation to vertical */
     -webkit-line-clamp: 2;       /* Limit to 2 lines */
+    line-clamp: 2;
     max-width: 85px;
     line-height: 1.2em;          /* Adjust line height to fit text neatly */
     max-height: calc(1.2em * 2); /* Match the line height for 2 lines */
@@ -170,12 +188,17 @@ body {
 }
 .file:hover {
     background-color: var(--hover-color);
+    border: 1px solid var(--border-color);
 }
 .info_bar {
+    flex: 0 0 auto; /* Ensure the info bar doesn’t shrink or grow */
     border-top: 1px solid var(--border-color);
     background-color: var(--secondary-color);
     color: var(--text-color);
     padding: 3px;
+    position: sticky; /* Keep the info bar fixed at the bottom of the container */
+    bottom: 0;
+    z-index: 1; /* Ensure the info bar stays above the content */
 }
 .preview {
     flex: 0 0 300px;
@@ -188,4 +211,14 @@ body {
     gap: 10px;
     justify-content: center;
     color: var(--text-color);
+    min-width: 150px;
+}
+.resizer {
+    width: 5px;
+    background-color: #ccc;
+    cursor: ew-resize;
+    flex: 0 0 auto;
+}
+.resizer:hover {
+    background-color: #aaa;
 }

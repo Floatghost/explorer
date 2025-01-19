@@ -1,8 +1,8 @@
 {
     "$schema": "https://schema.tauri.app/config/2",
-    "productName": "explorer",
+    "productName": "fileexplorer",
     "version": "0.1.0",
-    "identifier": "com.explorer.app",
+    "identifier": "com.fileexplorer.app",
     "build": {
         "beforeDevCommand": "npm run dev",
         "beforeBuildCommand": "npm run build",
@@ -12,9 +12,9 @@
     "app": {
         "windows": [
         {
-            "title": "explorer",
-            "width": 800,
-            "height": 600,
+            "title": "fileexplorer",
+            "width": 1430,
+            "height": 950,
             "dragDropEnabled": true,
             "transparent": false
         }
@@ -34,7 +34,7 @@
         "icons/icon.ico"
         ],
         "resources": [
-            "C:/Users/levin/OneDrive/Code/tauri_app/explorer/static/favicon.png"
+            "C:/Users/levin/Code/tauri_app/explorer/static/favicon.png"
         ]
     }
 }
