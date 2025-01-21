@@ -1,6 +1,8 @@
 <script lang="ts">
     import Icon from '@iconify/svelte';
     import { invoke } from '@tauri-apps/api/core';
+    import { readFile } from '@tauri-apps/plugin-fs';
+    import * as path from '@tauri-apps/api/path';
     import { t } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import { get_dir_data, get_dir_info, type DirData } from '../$lib/get_data';
@@ -9,8 +11,17 @@
     let fileCount: number = 0; // Reactive variable for the number of files and folders
     let dir_data: DirData = { files: [], dirs: [] }; // Initialize as empty
 
-    let address: string = "C:/Users/Levin/Downloads";
+    let address: string = "/";
     let search: string;
+
+    let selected_elements = [];
+
+    //
+    //settings
+    //
+    let show_types: boolean = true;
+    
+    const home = path.homeDir();
 
     // Function to fetch directory information
     async function loadDirInfo() {
@@ -32,6 +43,13 @@
             console.error("DirInfo:", dirInfo);
             dir_data = { files: [], dirs: [] }; // Fallback to an empty state
         }
+    }
+
+    function change_dir(dir_name: string): void  {
+        address = dir_name;
+        loadDirInfo();
+
+        console.log("changed dir to: ", address);
     }
 
 
@@ -85,6 +103,57 @@
                 document.body.style.cursor = 'default';
             }
         });
+
+    }
+    // Define a mapping of file extensions to icons/images
+    const fileIcons: Record<string, string> = {
+        pdf: "mdi:file-pdf",
+        docx: "mdi:file-word",
+        doc: "mdi:file-word",
+        xlsx: "mdi:file-excel",
+        png: "mdi:file-image",
+        jpg: "mdi:file-image",
+        jpeg: "mdi:file-image",
+        txt: "mdi:file-document",
+        mp4: "mdi:file-video",
+        mp3: "mdi:file-music",
+        default: "mdi:file-outline" // Fallback icon
+    };
+
+    const file_dyn_icons: string[] = [
+        "png", "jpeg", "jpg", "webp"
+    ]
+
+    function getFileIcon(ext: string): string {
+        //const ext: string | undefined = fileName.split('.').pop()?.toLowerCase(); // Extract file extension
+        //const re: RegExp = /(?:\.([^.]+))?$/;
+        //const match = re.exec(fileName); // Execute regex
+        //const ext: string | undefined = match ? match[1]?.toLowerCase() : undefined; // Safely extract file extension
+        console.log(
+            "choose: ",
+            ext ? fileIcons[ext] || fileIcons.default : fileIcons.default,
+            " for: ",
+            ext
+        );
+        return ext ? fileIcons[ext] || fileIcons.default : fileIcons.default; // Return corresponding icon or fallback
+    };
+
+    function formatBytes(bytes: number, decimals: number = 2): string {
+        if (!+bytes) return '0 Bytes'
+
+        const k = 1024
+        const dm = decimals < 0 ? 0 : decimals
+        const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+    }
+
+    async function convertToFileURL(filePath: string): Promise<string> {
+        // Ensure the file path is valid and safe for the browser
+        const formattedPath = await path.resolve(filePath); // Normalize the path
+        return `file://${formattedPath.replace(/\\/g, '/')}`; // Convert to file:// and replace backslashes with forward slashes
     }
 </script>
 
@@ -120,9 +189,9 @@
             <ul>
                 {#if dir_data.dirs.length > 0}
                     {#each dir_data.dirs as dir}
-                        <div class="item">
+                        <button class="item" on:click={() => change_dir(dir.dir_name)}>
                             {dir.dir_name}
-                        </div>
+                        </button>
                     {/each}
                 {:else}
                     <li>No folders found.</li>
@@ -137,8 +206,30 @@
                 {#if dir_data.files.length > 0}
                     {#each dir_data.files as file}
                         <div class="file">
-                            <Icon class="icon" icon="mdi:file-outline" width="60%" height="60%" />
-                            <p class="file-name">{file.file_name}</p>
+                            <!-- Dynamically set the icon based on file extension -->
+                            {#if file_dyn_icons.includes(file.file_type)}
+                                {#await convertToFileURL(file.file_location) then fileUrl}
+                                    <img alt="" src={fileUrl} />
+                                {:catch error}
+                                    <p>Error loading image</p>
+                                {/await}
+                            {:else}
+                                <Icon
+                                    class="icon"
+                                    icon={getFileIcon(file.file_type)}
+                                    width="60%"
+                                    height="60%"
+                                />
+                            {/if}
+                            <!-- for custom images <img 
+                                class="icon"
+                                src={`/icons/${getFileIcon(file.file_name)}.png`}
+                                alt={file.file_name}
+                            /> -->
+                            <p class="file-name">{file.file_name}{#if show_types}.{file.file_type}{/if}</p>
+                            <span class="tooltip">  type: {file.file_type}
+                                                    size: {formatBytes(file.file_size)}
+                            </span>
                         </div>
                     {/each}
                 {:else}
@@ -147,11 +238,11 @@
             </div>
         </div>
 
-        <!-- resizer -->
+        <!-- resizer
 
         <div class="resizer"></div>
 
-        <!-- Preview -->
+        Preview -->
 
         <div class="preview">
             {#if $t('preview')}
