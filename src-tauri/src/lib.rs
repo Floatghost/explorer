@@ -1,5 +1,5 @@
 mod files;
-use files::get_dir_info;
+use files::{get_dir_info_ser, get_dir_data_ser};
 
 use tauri_plugin_fs::FsExt;
 
@@ -14,7 +14,7 @@ pub fn run() {
             dbg!(scope.is_allowed(r"D://"));
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![get_dir_info])
+        .invoke_handler(tauri::generate_handler![get_dir_info_ser, get_dir_data_ser])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
