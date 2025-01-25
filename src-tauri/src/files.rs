@@ -1,10 +1,12 @@
+use image::GenericImageView;
 use serde::{Serialize, Deserialize};
+use core::error;
 use std::fs::{self, metadata, FileType};
 //use std::os::windows::fs::MetadataExt; // Windows-specific extensions
 use std::path::Path;
 
 #[derive(Serialize, Deserialize)]
-struct FileInfo {
+pub struct FileInfo {
     file_name: String,
     file_type: String,
     file_location: String,
@@ -175,3 +177,4 @@ pub fn get_dir_info_ser(dir_path: String) -> String {
     //println!("{:?}", serialize_data(&out));
     serialize_data(&out)
 }
+

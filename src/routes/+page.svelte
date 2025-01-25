@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from '@iconify/svelte';
-    import { invoke } from '@tauri-apps/api/core';
+    import { invoke, convertFileSrc } from '@tauri-apps/api/core';
     import { readFile } from '@tauri-apps/plugin-fs';
     import * as path from '@tauri-apps/api/path';
     import { t } from 'svelte-i18n';
@@ -121,14 +121,10 @@
     };
 
     const file_dyn_icons: string[] = [
-        "png", "jpeg", "jpg", "webp"
+        "png", "jpeg", "jpg", "webp", "gif"
     ]
 
     function getFileIcon(ext: string): string {
-        //const ext: string | undefined = fileName.split('.').pop()?.toLowerCase(); // Extract file extension
-        //const re: RegExp = /(?:\.([^.]+))?$/;
-        //const match = re.exec(fileName); // Execute regex
-        //const ext: string | undefined = match ? match[1]?.toLowerCase() : undefined; // Safely extract file extension
         console.log(
             "choose: ",
             ext ? fileIcons[ext] || fileIcons.default : fileIcons.default,
@@ -150,10 +146,17 @@
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
     }
 
-    async function convertToFileURL(filePath: string): Promise<string> {
+    async function convertToFileURL(filePath: string, protocol: string = 'asset'): Promise<string> {
         // Ensure the file path is valid and safe for the browser
-        const formattedPath = await path.resolve(filePath); // Normalize the path
-        return `file://${formattedPath.replace(/\\/g, '/')}`; // Convert to file:// and replace backslashes with forward slashes
+        //const formattedPath = await path.resolve(filePath); // Normalize the path
+        //return `file://${formattedPath.replace(/\\/g, '/')}`; // Convert to file:// and replace backslashes with forward slashes
+        try {
+            // Convert the file path to a WebView-compatible URL
+            return convertFileSrc(filePath, protocol);
+        } catch (error) {
+            console.error('Error converting file path to URL:', error);
+            throw new Error(`Failed to convert file path: ${filePath}`);
+        }
     }
 </script>
 
@@ -206,7 +209,7 @@
                 {#if dir_data.files.length > 0}
                     {#each dir_data.files as file}
                         <div class="file">
-                            <!-- Dynamically set the icon based on file extension -->
+                            <!-- Display dynamic images -->
                             {#if file_dyn_icons.includes(file.file_type)}
                                 {#await convertToFileURL(file.file_location) then fileUrl}
                                     <img alt="" src={fileUrl} />
@@ -214,6 +217,7 @@
                                     <p>Error loading image</p>
                                 {/await}
                             {:else}
+                                <!-- Display icons for non-image files -->
                                 <Icon
                                     class="icon"
                                     icon={getFileIcon(file.file_type)}
@@ -221,15 +225,9 @@
                                     height="60%"
                                 />
                             {/if}
-                            <!-- for custom images <img 
-                                class="icon"
-                                src={`/icons/${getFileIcon(file.file_name)}.png`}
-                                alt={file.file_name}
-                            /> -->
                             <p class="file-name">{file.file_name}{#if show_types}.{file.file_type}{/if}</p>
                             <span class="tooltip">  type: {file.file_type}
-                                                    size: {formatBytes(file.file_size)}
-                            </span>
+                                                    size: {formatBytes(file.file_size)}</span>
                         </div>
                     {/each}
                 {:else}

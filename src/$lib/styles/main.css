@@ -183,6 +183,9 @@ body {
     overflow: hidden;
     text-align: center; /* Center text inside the file box */
 }
+.file img {
+    max-height: calc(100% - 2.5em);
+}
 .file-name {
     user-select: none;
     overflow: hidden;            /* Hide overflowing text */
