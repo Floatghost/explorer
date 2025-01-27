@@ -6,6 +6,7 @@
     import { t } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import { get_dir_data, get_dir_info, type DirData } from '../$lib/get_data';
+    import { load_plugins } from '../$lib/load_plugins';
 
     let infoBarText = 'Loading...'; // Reactive variable for the info bar
     let fileCount: number = 0; // Reactive variable for the number of files and folders
@@ -56,6 +57,7 @@
     // Load directory info on component mount
     onMount(() => {
         loadDirInfo();
+        load_plugins();
     });
 
     document.addEventListener('contextmenu', function (event) {
