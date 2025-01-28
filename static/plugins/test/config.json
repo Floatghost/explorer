@@ -1,7 +1,13 @@
 {
-    "name": "Test Plugin",
-    "description": "Test Plugin for Tauri app",
-    "preview": {
-        "txt": ["./preview_txt.svelte", "./preview_txt.css", "./preview_txt.wasm"]
+    "some_Plugin_Name": {
+        "function": {
+            "preview": {
+                "txt": ["./preview_txt.svelte", "./preview_txt.wasm"],
+                "json": ["./preview_txt.svelte", "./preview_txt.wasm"]
+            },
+            "other": {
+                "default": ["my_wasm.wasm"]
+            }
+        }
     }
 }
