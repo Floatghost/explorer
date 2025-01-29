@@ -7,6 +7,7 @@
     import { onMount } from 'svelte';
     import { get_dir_data, get_dir_info, type DirData } from '../$lib/get_data';
     import { load_plugins } from '../$lib/load_plugins';
+    import {onDrag} from '../$lib/drag_me'
 
     let infoBarText = 'Loading...'; // Reactive variable for the info bar
     let fileCount: number = 0; // Reactive variable for the number of files and folders
@@ -160,6 +161,15 @@
             throw new Error(`Failed to convert file path: ${filePath}`);
         }
     }
+
+    let resizeWidth = 0;
+    let width = 0;
+    let debugDelta;
+    function handleDrag(event: Event) {
+    const customEvent = event as CustomEvent<number>;
+    resizeWidth = width + customEvent.detail;
+    debugDelta = customEvent.detail;
+}
 </script>
 
 <div class="container">
@@ -189,7 +199,7 @@
 
     <div class="below_Toolbar">
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div class="sidebar" style="width: {resizeWidth}px;">
             <h3>Folders</h3>
             <ul>
                 {#if dir_data.dirs.length > 0}
@@ -203,6 +213,17 @@
                 {/if}
             </ul>
         </div>
+
+        <div 
+            role="separator"
+            aria-orientation="vertical"
+            style="background-color:gray; 
+                width:4px;
+                cursor: col-resize;" 
+            use:onDrag={{ orientation: 'vertical' }}
+            on:drag={handleDrag}
+            on:dragEnd={((() => (width = resizeWidth)) as unknown as (e: Event) => void)}
+        ></div>
     
         <!-- Main content -->
         <div class="main">
@@ -238,9 +259,9 @@
             </div>
         </div>
 
-        <!-- resizer
 
-        <div class="resizer"></div>
+        <!-- resizer
+        https://stackoverflow.com/questions/77060803/resizable-sidebar-in-svelte-mouse-and-sidebar-width-dont-stay-in-sync
 
         Preview -->
 
