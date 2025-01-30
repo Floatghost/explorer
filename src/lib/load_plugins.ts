@@ -1,7 +1,7 @@
 import { invoke, convertFileSrc } from '@tauri-apps/api/core';
 import { readFile } from '@tauri-apps/plugin-fs';
 import * as path from '@tauri-apps/api/path';
-import { get_dir_data, type DirData, type FileInfo, type DirInfo } from '../$lib/get_data'
+import { get_dir_data, type DirData, type FileInfo, type DirInfo } from './get_data'
 
 interface plugin {
     preview: Preview[],

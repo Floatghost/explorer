@@ -4,10 +4,11 @@
 export const prerender = true;
 export const ssr = false;
 
+/*
 // Import your app initialization logic
-import { initializeApp, loadTheme } from '../$lib/main';
+import { initializeApp, loadTheme } from '../lib/main';
 import '../$lib/styles/main.css';
-import { setLanguage } from "../$lib/i18n/i18n";
+import { setLanguage } from "../lib/i18n/i18n";
 
 // Initialize global logic (e.g., app setup, i18n)
 export const load = async () => {
@@ -19,3 +20,4 @@ export const load = async () => {
     const defaultThemeUrl = '/themes/dark-theme.json'; // Adjust path as needed
     loadTheme(defaultThemeUrl);
 };
+*/
