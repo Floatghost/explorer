@@ -39,8 +39,7 @@ interface Other {
 
 export async function load_plugins()/*: Promise<plugin[]>*/ {
     
-    let temp = invoke("get_plugin_data", {filepath: "../explorer/static/plugins/test/config.json"});
-
+    let temp = invoke("get_plugin_data", {filepath: "C:/Users/levin/Code/tauri_app/explorer/static/plugins/test/config.json"});
 
     console.log("get_plugin_data: ", temp);
 
