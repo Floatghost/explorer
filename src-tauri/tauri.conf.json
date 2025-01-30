@@ -16,7 +16,14 @@
             "width": 1430,
             "height": 950,
             "dragDropEnabled": true,
-            "transparent": false
+            "transparent": false,
+            "backgroundColor": "#0f111a",
+            "center": true,
+            "focus": true,
+            "visible": true,
+            "fullscreen": false,
+            "resizable": true,
+            "zoomHotkeysEnabled": true
         }
         ],
         "security": {

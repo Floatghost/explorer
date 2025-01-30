@@ -8,12 +8,13 @@
     import { get_dir_data, get_dir_info, type DirData } from '../$lib/get_data';
     import { load_plugins } from '../$lib/load_plugins';
     import {onDrag} from '../$lib/drag_me'
+    import { getCurrentWindow } from '@tauri-apps/api/window';
 
     let infoBarText = 'Loading...'; // Reactive variable for the info bar
     let fileCount: number = 0; // Reactive variable for the number of files and folders
     let dir_data: DirData = { files: [], dirs: [] }; // Initialize as empty
 
-    let address: string = "C:/";
+    let address: string = "C:\\";
     let search: string;
 
     let selected_elements = [];
@@ -54,11 +55,16 @@
         console.log("changed dir to: ", address);
     }
 
+    //async function setupWindow() {
+    //    const appWindow = await getCurrentWindow();
+    //    appWindow.show();
+    //}
 
     // Load directory info on component mount
     onMount(() => {
         loadDirInfo();
         load_plugins();
+        //setupWindow();
     });
 
     document.addEventListener('contextmenu', function (event) {
@@ -163,14 +169,20 @@
         }
     }
 
+    function strip_full_path(full_path: string): string {
+        return full_path.replace(/\/$/, "").split(/[/\\]/).pop() || "";
+    }
+
     let resizeWidth: number = 300;
     let width: number = 300;
     let debugDelta;
+
+
     function handleDrag(event: Event) {
-    const customEvent = event as CustomEvent<number>;
-    resizeWidth = width + customEvent.detail;
-    debugDelta = customEvent.detail;
-}
+        const customEvent = event as CustomEvent<number>;
+        resizeWidth = width + customEvent.detail;
+        debugDelta = customEvent.detail;
+    }
 </script>
 
 <div class="container">
@@ -194,6 +206,8 @@
     <div class="toolbar">
         <button>
             <Icon icon="mdi:folder-plus-outline" />
+        </button>
+        <button>
             <Icon icon="mdi:settings" />
         </button>
     </div>
@@ -206,7 +220,7 @@
                 {#if dir_data.dirs.length > 0}
                     {#each dir_data.dirs as dir}
                         <button class="item" on:click={() => change_dir(dir.dir_name)}>
-                            {dir.dir_name}
+                            {strip_full_path(dir.dir_name)}
                         </button>
                     {/each}
                 {:else}
@@ -215,12 +229,12 @@
             </ul>
         </div>
 
-        <div 
+        <div
             role="separator"
             aria-orientation="vertical"
-            style="background-color:gray; 
+            style="background-color: var(--primary-color); 
                 width:4px;
-                cursor: col-resize;" 
+                cursor: w-resize;"
             use:onDrag={{ orientation: 'vertical' }}
             on:drag={handleDrag}
             on:dragEnd={((() => (width = resizeWidth)) as unknown as (e: Event) => void)}
@@ -232,7 +246,7 @@
             <div class="content">
                 {#if dir_data.files.length > 0}
                     {#each dir_data.dirs as dir}
-                        <div class="file">
+                        <button class="file" on:click={() => change_dir(dir.dir_name)}>
                             <!-- Display dynamic images -->
                                 <!-- Display icons for non-image files -->
                             {#await convertToFileURL(getFileIcon("folder")) then fileUrl}
@@ -250,15 +264,15 @@
                                 {console.error("fileurl error: ", error)}
                             {/await}
 
-                            <p class="file-name">{dir.dir_name}</p>
+                            <p class="file-name">{strip_full_path(dir.dir_name)}</p>
                             <span class="tooltip">sub_folder: {dir.dir_sub_dirs}
                                                     sub_files: {dir.dir_sub_files}
                             </span>
-                        </div>
+                        </button>
                     {/each}
                 
                     {#each dir_data.files as file}
-                        <div class="file">
+                        <button class="file">
                             <!-- Display dynamic images -->
                             {#if file_dyn_icons.includes(file.file_type)}
                                 {#await convertToFileURL(file.file_location) then fileUrl}
@@ -278,10 +292,10 @@
                             <p class="file-name">{file.file_name}{#if show_types}.{file.file_type}{/if}</p>
                             <span class="tooltip">  type: {file.file_type}
                                                     size: {formatBytes(file.file_size)}</span>
-                        </div>
+                        </button>
                     {/each}
                 {:else}
-                    <p>No files found.</p>
+                    <p style="color: var(--text-color);">No files found.</p>
                 {/if}
             </div>
         </div>

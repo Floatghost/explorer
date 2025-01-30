@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use serde_json::{Value, Result};
+use serde_json::Value;
 use std::fs;
 use serde::{Serialize, Deserialize};
 
@@ -59,7 +59,7 @@ pub fn get_plugin_data(filepath: String) -> BoundFunctions {
     //../explorer/static/plugins/test/config.json
     let json_data = match fs::read_to_string(filepath) {
         Ok(n) => n,
-        Err(_) => return BoundFunctions::new(),
+        Err(e) => {let mut t = BoundFunctions::new(); t.other.push(Other{name: e.to_string(), plugin_files: vec!["".to_string()]}); return t;},
     };
     
     let mut out = BoundFunctions::new();
