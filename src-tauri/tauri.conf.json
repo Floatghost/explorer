@@ -23,7 +23,8 @@
             "visible": true,
             "fullscreen": false,
             "resizable": true,
-            "zoomHotkeysEnabled": true
+            "zoomHotkeysEnabled": true,
+            "titleBarStyle": "Transparent"
         }
         ],
         "security": {
