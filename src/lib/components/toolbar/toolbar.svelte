@@ -27,10 +27,17 @@
 </div>
 
 <style>
+.toolbar {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    padding-top: 5px;
+}
 .toolbar-content {
     display: flex;
     flex: 1;
     flex-direction: row;
+    justify-content: space-around;
 }
 .seperator {
     width: 10px;
