@@ -36,7 +36,7 @@
     display: flex;
     flex: 1;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 .seperator {
     width: 10px;

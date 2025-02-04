@@ -33,13 +33,15 @@
 
 <style>
 .search-box {
-    width: 240px;
+    display: flex;
+    flex: 1;
+    padding-right: 10px;
 }
 
 .search-input-wrapper {
     position: relative;
     display: flex;
-    gap: 8px;
+    flex: 1;
     align-items: center;
 }
 
@@ -92,6 +94,8 @@
 
 .search-input:hover {
     background-color: var(--hover-color);
+    border-color: var(--selected-color);
+    transition: 1.5s ease;
 }
 
 .search-input:focus {
