@@ -1,2 +1,5 @@
 export * from "./toolbar"
 export * from "./mainview"
+export * from "./sidebar"
+export * from "./preview"
+export * from "./infobar"
