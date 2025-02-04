@@ -19,8 +19,7 @@
 
 <style>
     .mainview-wrapper {
-        width: 100%;
-        height: 100%;
+        flex: 1;
         display: flex;
         flex-direction: column;
     }
@@ -32,7 +31,7 @@
         justify-content: center; /* Center items */
         align-items: flex-start; /* Align items to the top */
         gap: 10px; /* Space between items */
-        padding: 10px;
+        padding-top: 5px;
         overflow-x: hidden;
         overflow-y: auto; /* Enable scrolling */
         max-height: calc(100vh - 50px); /* Adjust based on layout needs */

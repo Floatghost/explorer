@@ -27,6 +27,11 @@
 </div>
 
 <style>
+.toolbar {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
 .toolbar-content {
     display: flex;
     flex: 1;
