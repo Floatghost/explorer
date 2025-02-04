@@ -3,29 +3,24 @@
         removefocus
     } from "$lib/utils/index"
 
-    //let searchfield = document.querySelector("search-input");
-    //
-    //console.log("searchfield: ", searchfield);
-    //if (searchfield != null) {
-    //    searchfield.addEventListener('keyup', (e) => {
-    //        console.log("event key: ", key);
-    //        if (e.keyCode === 13) {
-    //            console.log("blured searchfield");
-    //            searchfield.
-    //        }
-    //    })
-    //}
-
     export let searchTerm: string;
+    export let placeholder: string = "Search";
+    export let width: number = 240;
 </script>
 
 <div class="search-box">
     <div class="search-input-wrapper">
         <input
             type="text"
-            placeholder="Search Files"
+            placeholder={placeholder}
             bind:value={searchTerm}
             on:change={() => removefocus(document.activeElement)}
+            on:keyup={(e) => {
+                if (e.key === 'Enter') {
+                    console.log("Enter key pressed. Current search term:", searchTerm);
+                    removefocus(document.activeElement);
+                }
+            }}
             class="search-input"
         />
         {#if searchTerm}
