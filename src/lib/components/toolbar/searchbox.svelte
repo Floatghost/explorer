@@ -69,7 +69,7 @@
     padding: 4px 8px;
     font-size: 11px;
     color: #757575;
-    background: var(--surface1);
+    background: transparent;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -101,7 +101,7 @@
 
 .search-input:focus {
     outline: none;
-    border-color: rgb(106, 106, 240);
+    border-color: var(--selected-color);
     box-shadow: 0 0 0 2px color-mix(in srgb, rgb(106, 106, 240) 50%, transparent);
 }
 </style>
