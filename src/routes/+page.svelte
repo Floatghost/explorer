@@ -8,6 +8,8 @@
     } from "$lib/components/index";
     import "$lib/app.css";
     import { onMount } from 'svelte';
+    import { themeStore } from "$lib/stores";
+    import { themes } from "$lib/definitions";
     
     let isLoading: boolean = true;
     let searchTerm: string = "";
@@ -18,6 +20,7 @@
         files = [...files, ...Array(1000).fill("test")];
         isLoading = false;
         console.log(files);
+        themeStore.setTheme("dark");
     });
     </script>
     

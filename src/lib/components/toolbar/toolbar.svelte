@@ -15,14 +15,21 @@
         available: false,
         click: false,
     };
+    let refresh: boolean = false;
 </script>
 
 <div class="toolbar"> 
     <div class="toolbar-content">
-        <UndoRedo bind:previos bind:next />
+        <UndoRedo bind:previos bind:next bind:refresh />
         <div class="seperator"></div>
-        <SearchBox width={400} bind:searchTerm={adress} placeholder="Enter path to file" />
-        <Searchbox bind:searchTerm placeholder="Search Files" />
+        <div class="searchboxes-container">
+            <div class="address-container">
+                <SearchBox width={400} bind:searchTerm={adress} placeholder="Path" />
+            </div>
+            <div class="search-container">
+                <Searchbox bind:searchTerm placeholder="Search" />    
+            </div>
+        </div>
     </div>
 </div>
 
@@ -31,6 +38,10 @@
     padding-top: 5px;
     padding-bottom: 5px;
     border-bottom: 1px solid var(--border-color);
+    background-color: var(--primary-color);
+}
+.toolbar:hover {
+    border-color: var(--border-color-light);
 }
 .toolbar-content {
     display: flex;
@@ -40,5 +51,19 @@
 }
 .seperator {
     width: 10px;
+}
+.searchboxes-container {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+.address-container {
+    width: 60%;
+    min-width: 200px;
+}
+.search-container {
+    width: 20%;
+    min-width: 200px;
 }
 </style>
