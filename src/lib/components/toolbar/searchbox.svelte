@@ -66,7 +66,7 @@
     padding: 4px 8px;
     font-size: 11px;
     color: #757575;
-    background: transparent;
+    background: var(--primary-color);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -95,7 +95,7 @@
 .search-input:hover {
     background-color: var(--hover-color);
     border-color: var(--selected-color);
-    transition: 1.5s ease;
+    transition: 0.5s ease;
 }
 
 .search-input:focus {

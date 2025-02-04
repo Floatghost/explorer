@@ -27,7 +27,7 @@
         border-radius: 5px;
         width: var(--file-size-width);
         height: var(--file-size-height);
-        background-color: transparent;
+        background-color: var(--primary-color);
         color: var(--text-unfocused);
     }
     .file-btn:hover {

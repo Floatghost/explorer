@@ -17,7 +17,7 @@
             "height": 950,
             "dragDropEnabled": true,
             "transparent": false,
-            "backgroundColor": "#0f111a",
+            "backgroundColor": "FFFFFF",
             "center": true,
             "focus": true,
             "visible": true,

@@ -9,6 +9,7 @@
         available: false,
         click: false,
     };
+    export let refresh: boolean;
 
     function undo() {
         if (previos["available"] == true) {
@@ -19,6 +20,9 @@
         if (next["available"] == true) {
             next["click"] = true;
         }
+    }
+    function refresh_btn() {
+        refresh = true;
     }
 
 </script>
@@ -31,7 +35,9 @@
         <button class="btn-redo" on:click={redo} aria-label="redo">
             <Icon icon="material-symbols:redo" width="24" height="24"/>
         </button>
-        
+        <button class="btn-refresh" on:click={refresh_btn} aria-label="redo">
+            <Icon icon="material-symbols:refresh-rounded" width="24" height="24"/>
+        </button>
     </div>
 </div>
 
@@ -45,7 +51,7 @@
 }
 .btn-undo {
     border: 1px solid var(--border-color);
-    background-color: transparent;
+    background-color: var(--primary-color);
     width: 30px;
     height: 30px;
     border-radius: 5px;
@@ -54,14 +60,22 @@
 }
 .btn-redo {
     border: 1px solid var(--border-color);
-    background-color: transparent;
+    background-color: var(--primary-color);
     width: 30px;
     height: 30px;
     border-radius: 5px;
     padding: 0px;
     color: var(--text-unfocused);
 }
-
+.btn-refresh {
+    border: 1px solid var(--border-color);
+    background-color: var(--primary-color);
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    padding: 0px;
+    color: var(--text-unfocused);
+}
 .btn-undo:hover {
     background-color: var(--hover-color);
     border-color: var(--selected-color);
@@ -69,6 +83,12 @@
     transition: 0.5s ease;
 }
 .btn-redo:hover {
+    background-color: var(--hover-color);
+    border-color: var(--selected-color);
+    color: var(--text-color);
+    transition: 0.5s ease;
+}
+.btn-refresh:hover {
     background-color: var(--hover-color);
     border-color: var(--selected-color);
     color: var(--text-color);

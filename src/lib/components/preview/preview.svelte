@@ -10,5 +10,9 @@
     .preview-wrapper {
         width: 100px;
         border-left: 1px solid var(--border-color);
+        background-color: var(--primary-color);
+    }
+    .preview-wrapper:hover {
+        border-color: var(--border-color-light);
     }
 </style>
