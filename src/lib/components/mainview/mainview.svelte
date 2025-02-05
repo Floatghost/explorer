@@ -1,17 +1,27 @@
 <script lang="ts">
     import { File } from "$lib/components/mainview/index";
+    import type { DirInfo } from "$lib/types";
+    import { get_files } from "$lib/utils";
 
-    export let files: string[];
+    export let path: string;
+    export let files: DirInfo = {elements: [], name: "", sub_dirs: 0, sub_files: 0};
     let clicked: number;
     let fileicontype: string = "svg";
     let fileiconpath: string = "mdi:file-document";
+
+
+    async function updateFiles() {
+        files = await get_files(path);
+        console.log("Files updated:", files);
+    }
+    
 
     console.log("mainview called");
 </script>
 
 <div class="mainview-wrapper">
     <div class="files-wrapper">
-        {#each files as file}
+        {#each files.elements as file}
             <File bind:clicked bind:fileicontype bind:fileiconpath />
         {/each}
     </div>
