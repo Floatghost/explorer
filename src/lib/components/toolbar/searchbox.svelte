@@ -53,7 +53,7 @@
     border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 12px;
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     color: var(--text-color);
     transition: all 0.2s ease;
 }
@@ -66,7 +66,7 @@
     padding: 4px 8px;
     font-size: 11px;
     color: #757575;
-    background: var(--primary-color);
+    background: var(--secondary-color);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -101,6 +101,6 @@
 .search-input:focus {
     outline: none;
     border-color: var(--selected-color);
-    box-shadow: 0 0 0 2px color-mix(in srgb, rgb(106, 106, 240) 50%, transparent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--selected-color) 50%, transparent);
 }
 </style>

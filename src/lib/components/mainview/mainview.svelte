@@ -1,10 +1,11 @@
 <script lang="ts">
     import { File } from "$lib/components/mainview/index";
 
-    export let files: string[];
+    export let path: string;
     let clicked: number;
     let fileicontype: string = "svg";
     let fileiconpath: string = "mdi:file-document";
+    let files: string[] = [...Array(1000).fill("test")];
 
     console.log("mainview called");
 </script>

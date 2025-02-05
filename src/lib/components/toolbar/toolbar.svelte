@@ -38,7 +38,7 @@
     padding-top: 5px;
     padding-bottom: 5px;
     border-bottom: 1px solid var(--border-color);
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
 }
 .toolbar:hover {
     border-color: var(--border-color-light);

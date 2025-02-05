@@ -29,9 +29,10 @@
         height: var(--file-size-height);
         background-color: var(--primary-color);
         color: var(--text-unfocused);
+        cursor: pointer;
     }
     .file-btn:hover {
-        border-color: var(--selected-color);
+        border-color: var(--border-color-light);
         color: var(--text-color);
         background-color: #272e4f;
     }

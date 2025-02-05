@@ -14,7 +14,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 10px;
-        background-color: var(--primary-color); /* Ensure visibility */
+        background-color: var(--secondary-color); /* Ensure visibility */
     }
     .infobar-wrapper:hover {
         border-color: var(--border-color-light);

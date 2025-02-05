@@ -13,16 +13,16 @@
     
     let isLoading: boolean = true;
     let searchTerm: string = "";
-    let adress: string = "";
-    let files: string[] = [];
+    let path: string = "";
     
     onMount(() => {
-        files = [...files, ...Array(1000).fill("test")];
+        path = "C:\\";
         isLoading = false;
-        console.log(files);
-        themeStore.setTheme("dark");
+        console.log(path);
+        themeStore.init();
     });
-    </script>
+    themeStore.setTheme("path");
+</script>
     
     {#if isLoading}
         <p>Loading...</p>
@@ -30,11 +30,11 @@
         <div class="app-container">
             <ToolBar 
             bind:searchTerm
-            bind:adress
+            bind:adress={path}
             />
             <div class="content-container">
                 <Sidebar />
-                <MainView bind:files />
+                <MainView bind:path />
                 <Preview />
             </div>
             <Infobar />
