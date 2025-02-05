@@ -12,3 +12,18 @@ export interface Theme {
         selected_color: string;
     };
 }
+
+
+export interface DirInfo {
+    name: string,
+    sub_dirs: number,
+    sub_files: number,
+    elements: ElementInfo[],
+}
+
+export interface ElementInfo {
+    filetype: string,
+    name: string,
+    size: number,
+    icon: string,
+}

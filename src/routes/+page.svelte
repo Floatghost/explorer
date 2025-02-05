@@ -10,18 +10,20 @@
     import { onMount } from 'svelte';
     import { themeStore } from "$lib/stores";
     import { themes } from "$lib/definitions";
+    import type { DirInfo } from "$lib/types";
     
     let isLoading: boolean = true;
     let searchTerm: string = "";
-    let path: string = "";
+    let adress: string = "";
+    let path: string = "C:\\";
+    let files: DirInfo = {elements: [], name: "", sub_dirs: 0, sub_files: 0};
     
     onMount(() => {
-        path = "C:\\";
         isLoading = false;
         console.log(path);
         themeStore.init();
     });
-    themeStore.setTheme("path");
+    themeStore.setTheme("dark");
 </script>
     
     {#if isLoading}
@@ -34,10 +36,10 @@
             />
             <div class="content-container">
                 <Sidebar />
-                <MainView bind:path />
+                <MainView bind:path bind:files />
                 <Preview />
             </div>
-            <Infobar />
+            <Infobar bind:files />
         </div>
     {/if}
     
