@@ -51,46 +51,49 @@
 }
 .btn-undo {
     border: 1px solid var(--border-color);
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     width: 30px;
     height: 30px;
     border-radius: 5px;
     padding: 0px;
     color: var(--text-unfocused);
+    cursor: pointer;
 }
 .btn-redo {
     border: 1px solid var(--border-color);
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     width: 30px;
     height: 30px;
     border-radius: 5px;
     padding: 0px;
     color: var(--text-unfocused);
+    cursor: pointer;
 }
 .btn-refresh {
     border: 1px solid var(--border-color);
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
     width: 30px;
     height: 30px;
     border-radius: 5px;
     padding: 0px;
     color: var(--text-unfocused);
+    cursor: pointer;
 }
 .btn-undo:hover {
     background-color: var(--hover-color);
-    border-color: var(--selected-color);
+    border-color: var(--border-color-light);
     color: var(--text-color);
     transition: 0.5s ease;
 }
 .btn-redo:hover {
     background-color: var(--hover-color);
-    border-color: var(--selected-color);
+    border-color: var(--border-color-light);
     color: var(--text-color);
     transition: 0.5s ease;
 }
 .btn-refresh:hover {
     background-color: var(--hover-color);
-    border-color: var(--selected-color);
+    border-color: var(--border-color-light);
     color: var(--text-color);
     transition: 0.5s ease;
 }

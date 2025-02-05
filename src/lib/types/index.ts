@@ -2,13 +2,13 @@ export interface Theme {
     name: string;
     label: string;
     colors: {
-        primary: string;
-        secondary: string;
-        border: string;
-        border_light: string;
-        hover: string;
-        text: string;
+        primary_color: string;
+        secondary_color: string;
+        border_color: string;
+        border_color_light: string;
+        hover_color: string;
+        text_color: string;
         text_unfocused: string;
-        selected: string;
+        selected_color: string;
     };
 }
