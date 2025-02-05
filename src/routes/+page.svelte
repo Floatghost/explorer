@@ -10,16 +10,17 @@
     import { onMount } from 'svelte';
     import { themeStore } from "$lib/stores";
     import { themes } from "$lib/definitions";
+    import type { DirInfo } from "$lib/types";
     
     let isLoading: boolean = true;
     let searchTerm: string = "";
     let adress: string = "";
-    let files: string[] = [];
+    let path: string = "C:\\";
+    let files: DirInfo = {elements: [], name: "", sub_dirs: 0, sub_files: 0};
     
     onMount(() => {
-        files = [...files, ...Array(1000).fill("test")];
         isLoading = false;
-        console.log(files);
+        console.log(path);
         themeStore.setTheme("dark");
     });
     </script>
@@ -30,14 +31,14 @@
         <div class="app-container">
             <ToolBar 
             bind:searchTerm
-            bind:adress
+            bind:adress={path}
             />
             <div class="content-container">
                 <Sidebar />
-                <MainView bind:files />
+                <MainView bind:path bind:files />
                 <Preview />
             </div>
-            <Infobar />
+            <Infobar bind:files />
         </div>
     {/if}
     
