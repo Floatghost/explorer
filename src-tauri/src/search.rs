@@ -1,4 +1,4 @@
-use crate::files::FileInfo;
+use crate::file::FileInfo;
 
 #[tauri::command(rename_all="snake_case")]
 pub fn search(query: String, engine: String) -> Vec<String> {

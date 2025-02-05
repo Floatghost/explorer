@@ -1,15 +1,11 @@
+// Prevents additional console window on Windows in release, DO NOT REMOVE!!
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
 mod files;
-mod search;
-mod cache;
-mod plugins;
-use files::{get_dir_info_ser, get_dir_data_ser};
-use search::search;
-use cache::cache_images;
-use plugins::get_plugin_data;
+use files::read::get_dir_info;
 
 use tauri_plugin_fs::FsExt;
 
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
@@ -20,7 +16,7 @@ pub fn run() {
             //dbg!(scope.is_allowed(r"D://"));
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![get_dir_info_ser, get_dir_data_ser, cache_images, search, get_plugin_data])
+        .invoke_handler(tauri::generate_handler![get_dir_info])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
