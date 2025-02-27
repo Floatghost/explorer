@@ -27,3 +27,8 @@ export interface ElementInfo {
     size: number,
     icon: string,
 }
+
+export interface History {
+    paths: string[],
+    index: number,
+}

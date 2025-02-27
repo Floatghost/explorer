@@ -13,6 +13,6 @@
         background-color: var(--secondary-color);
     }
     .sidebar-wrapper:hover {
-        border-color: var(--border-color-light);
+        border-color: var(--selected-color);
     }
 </style>

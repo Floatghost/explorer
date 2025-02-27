@@ -6,7 +6,7 @@ export function removefocus(html_obj: Element | null): null {
     return null;
 }
 
-import type { DirInfo } from "$lib/types";
+import type { DirInfo, History } from "$lib/types";
 import { invoke } from "@tauri-apps/api/core";
 
 export async function get_files(path: string): Promise<DirInfo> {
@@ -17,6 +17,7 @@ export async function get_files(path: string): Promise<DirInfo> {
         return out; // Return the populated DirInfo object
     } catch (error) {
         console.error("Error fetching directory info:", error);
+        console.error("function input: " + path);
         
         // Return an empty DirInfo object if an error occurs
         return {
@@ -27,4 +28,33 @@ export async function get_files(path: string): Promise<DirInfo> {
         };
     }
 }
+
+export function formatBytes(bytes: number, decimals: number = 2): string {
+    if (!+bytes) return '0 Bytes'
+
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+}
+
+export function delete_all_history_above(history: History, index: number): History {
+    if (!history || !history.paths.length) {
+        console.error("Error: Invalid history object.");
+        return { paths: ["C:\\"], index: 0 };
+    }
+
+    let out: History = { paths: [], index: 0 };
+
+    for (let i = 0; i <= index; i++) {
+        out.paths.push(history.paths[i]);
+    }
+
+    out.index = out.paths.length - 1;
+    return out;
+}
+
 

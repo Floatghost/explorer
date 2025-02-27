@@ -4,30 +4,24 @@
         UndoRedo,
     } from "$lib/components"
     import Searchbox from "./searchbox.svelte";
+    import type {History} from "$lib/types/index";
 
     export let searchTerm: string;
     export let adress: string;
-    export let previos: Record<string, boolean> = {
-        available: false,
-        click: false,
-    };
-    export let next: Record<string, boolean> = {
-        available: false,
-        click: false,
-    };
-    let refresh: boolean = false;
+    export let update: boolean;
+    export let history: History;
 </script>
 
 <div class="toolbar"> 
     <div class="toolbar-content">
-        <UndoRedo bind:previos bind:next bind:refresh />
+        <UndoRedo bind:refresh={update} bind:history bind:path={adress} />
         <div class="seperator"></div>
         <div class="searchboxes-container">
             <div class="address-container">
-                <SearchBox width={400} bind:searchTerm={adress} placeholder="Path" />
+                <SearchBox width={400} bind:searchTerm={adress} bind:update placeholder="Path" />
             </div>
             <div class="search-container">
-                <Searchbox bind:searchTerm placeholder="Search" />    
+                <Searchbox bind:searchTerm bind:update placeholder="Search" />    
             </div>
         </div>
     </div>
