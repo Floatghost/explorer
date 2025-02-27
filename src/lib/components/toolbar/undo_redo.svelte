@@ -1,24 +1,24 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
+    import type {History} from "$lib/types/index";
+    import { updated } from "$app/stores";
 
-    export let previos: Record<string, boolean> = {
-        available: false,
-        click: false,
-    };
-    export let next: Record<string, boolean> = {
-        available: false,
-        click: false,
-    };
     export let refresh: boolean;
+    export let history: History;
+    export let path: string;
 
     function undo() {
-        if (previos["available"] == true) {
-            previos["click"] = true;
+        if (history?.paths[history.index-1]) {
+            history.index -= 1;
+            path = history.paths[history.index];
+            refresh = true;
         }
     }
     function redo() {
-        if (next["available"] == true) {
-            next["click"] = true;
+        if (history?.paths[history.index+1]) {
+            history.index += 1;
+            path = history.paths[history.index];
+            refresh = true;
         }
     }
     function refresh_btn() {

@@ -10,20 +10,29 @@
     import { onMount } from 'svelte';
     import { themeStore } from "$lib/stores";
     import { themes } from "$lib/definitions";
-    import type { DirInfo } from "$lib/types";
+    import type { DirInfo, History } from "$lib/types";
+    import { TRUE } from "sass";
     
     let isLoading: boolean = true;
     let searchTerm: string = "";
-    let adress: string = "";
+    let history: History = {paths:["C:\\"], index: 0};
     let path: string = "C:\\";
     let files: DirInfo = {elements: [], name: "", sub_dirs: 0, sub_files: 0};
+    let update: boolean = false;
     
+    //$: {
+    //    history.paths.push(path);
+    //    history.index = history.paths.length-1;
+    //    console.log("history: " + history);
+    //}
+
     onMount(() => {
         isLoading = false;
         console.log(path);
         themeStore.init();
+        update = true;
     });
-    themeStore.setTheme("dark");
+    themeStore.setTheme("abyss");
 </script>
     
     {#if isLoading}
@@ -31,15 +40,25 @@
     {:else}
         <div class="app-container">
             <ToolBar 
-            bind:searchTerm
-            bind:adress={path}
+                bind:searchTerm
+                bind:adress={path}
+                bind:update
+                bind:history
             />
             <div class="content-container">
                 <Sidebar />
-                <MainView bind:path bind:files />
+                <MainView
+                    bind:path
+                    bind:files
+                    bind:update
+                    bind:searchTerm
+                    bind:history
+                />
                 <Preview />
             </div>
-            <Infobar bind:files />
+            <Infobar
+                bind:files
+            />
         </div>
     {/if}
     

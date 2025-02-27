@@ -6,6 +6,7 @@
     export let searchTerm: string;
     export let placeholder: string = "Search";
     export let width: number = 240;
+    export let update: boolean;
 </script>
 
 <div class="search-box">
@@ -14,10 +15,16 @@
             type="text"
             placeholder={placeholder}
             bind:value={searchTerm}
-            on:change={() => removefocus(document.activeElement)}
+            on:change={() => {
+                    console.log("Enter key pressed. Current search term:", searchTerm);
+                    update = true;
+                    removefocus(document.activeElement);
+
+            }}
             on:keyup={(e) => {
                 if (e.key === 'Enter') {
                     console.log("Enter key pressed. Current search term:", searchTerm);
+                    update = true;
                     removefocus(document.activeElement);
                 }
             }}

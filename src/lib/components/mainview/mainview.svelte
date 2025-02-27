@@ -1,20 +1,40 @@
 <script lang="ts">
     import { File } from "$lib/components/mainview/index";
-    import type { DirInfo } from "$lib/types";
+    import type { DirInfo, ElementInfo, History } from "$lib/types";
     import { get_files } from "$lib/utils";
 
     export let path: string;
-    export let files: DirInfo = {elements: [], name: "", sub_dirs: 0, sub_files: 0};
-    let clicked: number;
+    export let history: History;
+    export let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
+    export let update: boolean;
+    export let searchTerm: string;
+    
+    let clicked: ElementInfo | null = null;
     let fileicontype: string = "svg";
     let fileiconpath: string = "mdi:file-document";
 
-
     async function updateFiles() {
-        files = await get_files(path);
-        console.log("Files updated:", files);
+        const updatedFiles = await get_files(path);
+        files = updatedFiles;
     }
-    
+
+    // Reactively call updateFiles() when update changes to true
+    $: if (update) {
+        (async () => {
+            await updateFiles();
+            update = false; // Setze `update` zurück, aber erst nach erfolgreicher Aktualisierung
+        })();
+    }
+
+    $: if (clicked?.filetype === "dir") {
+        if (!path.endsWith("\\")) {
+            path += "\\";
+        }
+        
+        path += clicked.name;
+        update = true;
+        clicked = null; // Verhindert falsche Referenzen
+    }
 
     console.log("mainview called");
 </script>
@@ -22,7 +42,14 @@
 <div class="mainview-wrapper">
     <div class="files-wrapper">
         {#each files.elements as file}
-            <File bind:clicked bind:fileicontype bind:fileiconpath />
+            <File
+                bind:clicked
+                bind:fileicontype
+                bind:fileiconpath
+                bind:fileinfo={file}
+                bind:history
+                bind:path
+            />
         {/each}
     </div>
 </div>
@@ -38,34 +65,22 @@
     .files-wrapper {
         flex: 1;
         display: flex;
-        flex-wrap: wrap; /* Allow wrapping */
-        justify-content: center; /* Center items */
-        align-items: flex-start; /* Align items to the top */
-        gap: 10px; /* Space between items */
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: flex-start;
+        align-items: flex-start;
+        gap: 10px;
         padding-top: 5px;
         overflow-x: hidden;
-        overflow-y: auto; /* Enable scrolling */
-        max-height: calc(100vh - 50px); /* Adjust based on layout needs */
+        overflow-y: auto;
+        max-height: calc(100vh - 50px);
     }
 
-    /* Ensure File components take up space */
     .files-wrapper > * {
-        flex-basis: calc(25% - 10px); /* Adjust width, 4 per row */
+        flex-basis: calc(25% - 10px);
         max-width: calc(25% - 10px);
     }
 
-    /* Scrollbar Styling */
-    .files-wrapper {
-        scrollbar-width: thin; /* Firefox */
-        scrollbar-color: var(--text-unfocused) var(--primary-color); /* Thumb and track */
-    }
-    /*
-    .files-wrapper:hover {
-        scrollbar-color: var(--text-color) var(--primary-color);
-    }
-    */
-
-    /* Webkit-based browsers */
     ::-webkit-scrollbar {
         width: 10px;
     }

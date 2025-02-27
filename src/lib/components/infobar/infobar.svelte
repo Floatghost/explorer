@@ -20,6 +20,6 @@
         background-color: var(--secondary-color); /* Ensure visibility */
     }
     .infobar-wrapper:hover {
-        border-color: var(--border-color-light);
+        border-color: var(--selected-color);
     }
 </style>
