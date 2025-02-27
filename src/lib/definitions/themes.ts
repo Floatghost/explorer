@@ -15,7 +15,7 @@ export const themes: Record<string, Theme> = {
             selected_color: "#6a6af0",
         },
     },
-    pink: {
+    abyss: {
         name: "abyss",
         label: "abyss",
         colors: {
