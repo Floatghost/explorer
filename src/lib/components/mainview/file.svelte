@@ -71,7 +71,7 @@
         z-index: 10;
         opacity: 0;
         transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-        transition-delay: 500ms;
+        transition-delay: 1s;
 
         /* Centering tooltip */
         top: 110%; /* Position above the button */
