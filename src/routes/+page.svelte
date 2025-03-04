@@ -9,38 +9,72 @@
     import "$lib/app.css";
     import { onMount } from 'svelte';
     import { themeStore } from "$lib/stores";
-    import { themes } from "$lib/definitions";
     import type { DirInfo, History } from "$lib/types";
-    
+
     let isLoading: boolean = true;
     let searchTerm: string = "";
-    let history: History = {paths:["C:\\"], index: 0};
+    let history: History = { paths: ["C:\\"], index: 0 };
     let path: string = "C:\\";
-    let files: DirInfo = {elements: [], name: "", sub_dirs: 0, sub_files: 0};
+    let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
     let update: boolean = false;
+
+    let sidebarWidth = 200;
+    let previewWidth = 200;
+    let resizingTarget: "sidebar" | "preview" | null = null;
 
     onMount(() => {
         isLoading = false;
-        console.log(path);
         themeStore.init();
         update = true;
         themeStore.setTheme("abyss");
     });
+
+    function startResize(target: "sidebar" | "preview") {
+        resizingTarget = target;
+        document.addEventListener("mousemove", resize);
+        document.addEventListener("mouseup", stopResize);
+    }
+
+    function resize(event: MouseEvent) {
+        if (!resizingTarget) return;
+
+        if (resizingTarget === "sidebar") {
+            let newWidth = event.clientX;
+            sidebarWidth = Math.max(10, newWidth);
+        } else if (resizingTarget === "preview") {
+            let docWidth = document.body.clientWidth;
+            let newWidth = docWidth - event.clientX;
+            previewWidth = Math.max(10, newWidth);
+        }
+    }
+
+    function stopResize() {
+        resizingTarget = null;
+        document.removeEventListener("mousemove", resize);
+        document.removeEventListener("mouseup", stopResize);
+    }
 </script>
-    
-    {#if isLoading}
-        <p>Loading...</p>
-    {:else}
-        <div class="app-container">
-            <ToolBar 
-                bind:searchTerm
-                bind:adress={path}
-                bind:update
-                bind:history
-            />
-            <div class="content-container">
+
+{#if isLoading}
+    <p>Loading...</p>
+{:else}
+    <div class="app-container">
+        <ToolBar 
+            bind:searchTerm
+            bind:adress={path}
+            bind:update
+            bind:history
+        />
+        <div class="content-container">
+            <!-- Sidebar -->
+            <div class="sidebar" style="width: {sidebarWidth}px;">
                 <Sidebar />
-                <div class="resize1"></div>
+            </div>
+            <!-- Sidebar Resizer -->
+            <div class="resizer" on:mousedown={() => startResize("sidebar")}></div>
+
+            <!-- MainView -->
+            <div class="main-view"> 
                 <MainView
                     bind:path
                     bind:files
@@ -48,43 +82,61 @@
                     bind:searchTerm
                     bind:history
                 />
-                <div class="resize1"></div>
+            </div>
+            <!-- Preview Resizer -->
+            <div class="resizer" on:mousedown={() => startResize("preview")}></div>
+
+            <!-- Preview -->
+            <div class="preview" style="width: {previewWidth}px;">
                 <Preview />
             </div>
-            <Infobar
-                bind:files
-            />
         </div>
-    {/if}
-    
-    <style>
-        :root {
-            width: 100%;
-            height: 100%;
-            background-color: var(--primary-color);
-        }
-        .app-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex: 1;
-            flex-direction: column;
-        }
-        .content-container {
-            flex: 1; /* Take up remaining space, but not all */
-            display: flex;
-            overflow: hidden; /* Prevent it from expanding beyond limits */
-        }
-        .resize1 {
-            width: 3px;
-            height: 100%;
-            background-color: transparent;
-            position: relative;
-            left: -2px;
-        }
-        .resize1:hover {
-            background-color: var(--selected-color);
-            cursor: ew-resize;
-        }
-    </style>
-    
+        <Infobar bind:files />
+    </div>
+{/if}
+
+<style>
+    :root {
+        width: 100%;
+        height: 100%;
+        background-color: var(--primary-color);
+    }
+
+    .app-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .content-container {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+    }
+
+    .sidebar {
+        background-color: var(--secondary-color);
+    }
+
+    .preview {
+        background-color: var(--secondary-color);
+    }
+
+    .main-view {
+        flex: 1;
+        overflow: hidden;
+        user-select: none;
+    }
+
+    .resizer {
+        width: 5px;
+        height: 100%;
+        background-color: var(--border-color);
+        cursor: ew-resize;
+    }
+
+    .resizer:hover {
+        background-color: var(--selected-color);
+    }
+</style>
