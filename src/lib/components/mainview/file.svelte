@@ -10,7 +10,10 @@
     export let fileinfo: ElementInfo;
     export let history: History;
     export let path: string;
-    export let selected: boolean;
+    export let selected: {
+        selected: boolean,
+        path: string,
+    };
 
     function push_history(input: ElementInfo) {
         if (input.filetype === "dir") {
@@ -30,12 +33,13 @@
     }
 
     $: {
-            
+        console.log("selected");
+        console.log(selected);
     }
 
 </script>
 
-<div class="file-wrapper-{selected ? "selected" : "not"}">
+<div class="file-wrapper-{selected.selected ? "selected" : "not"}">
     <button class="file-btn" on:click={() => {clicked = fileinfo; push_history(clicked)}} on:dblclick={() => {clicked = fileinfo}} >
         {#if fileicontype == "svg"}
             <Icon width=100% icon={fileiconpath} height=auto />
