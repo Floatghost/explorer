@@ -10,7 +10,7 @@
     export let fileinfo: ElementInfo;
     export let history: History;
     export let path: string;
-    export let selected: Set<number>;
+    export let selected: boolean;
 
     function push_history(input: ElementInfo) {
         if (input.filetype === "dir") {
@@ -30,8 +30,7 @@
     }
 
     $: {
-            console.log("in file");
-            console.log(selected);
+            
     }
 
 </script>
