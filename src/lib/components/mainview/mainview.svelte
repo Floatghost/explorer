@@ -9,20 +9,19 @@
     export let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
     export let update: boolean;
     export let searchTerm: string;
-  
+
     let clicked: ElementInfo | null = null;
     let fileicontype: string = "svg";
     let fileiconpath: string = "mdi:file-document";
     
-    let selectedFiles: {
-        selected: boolean,
-        path: string,
-    }[] = []; // Tracks selected files
+    export let selectedFiles: { selected: boolean, path: string }[] = []; // Tracks selected files
     let divRefs: { el: HTMLElement; id: number }[] = []; // Stores references with IDs
 
     async function updateFiles() {
         const updatedFiles = await get_files(path);
         files = updatedFiles;
+
+        selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
     }
 
     $: if (update) {
@@ -77,7 +76,8 @@
         selectionBox.height = 0;
         selectionBox.active = true;
 
-        selectedFiles = []; // Reset selection
+        selectedFiles.forEach(file => file.selected = false); // Reset selection
+        selectedFiles = selectedFiles;
 
         document.addEventListener('pointermove', onPointerMove);
         document.addEventListener('pointerup', onPointerUp);
@@ -103,7 +103,8 @@
     }
 
     function checkSelection() {
-        selectedFiles = [];
+        selectedFiles.forEach(file => file.selected = false);
+        selectedFiles = selectedFiles;
 
         const box = {
             left: selectionBox.x,
@@ -127,10 +128,7 @@
                 rect.top < box.bottom &&
                 rect.bottom > box.top
             ) {
-                selectedFiles.push({selected: true, path: ""});
-            }
-            else {
-                selectedFiles.push({selected: false, path: ""});
+                selectedFiles[id].selected = true;
             }
         });
         //console.log("selected files");
@@ -172,7 +170,7 @@
                     bind:fileinfo={file}
                     bind:history
                     bind:path
-                    bind:selected={selectedFiles[i]}
+                    selected={selectedFiles[i]}
                 />
             </div>
         {/each}

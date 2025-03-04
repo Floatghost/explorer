@@ -32,11 +32,6 @@
         }
     }
 
-    $: {
-        console.log("selected");
-        console.log(selected);
-    }
-
 </script>
 
 <div class="file-wrapper-{selected.selected ? "selected" : "not"}">
