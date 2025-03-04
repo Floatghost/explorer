@@ -14,22 +14,21 @@
     let fileicontype: string = "svg";
     let fileiconpath: string = "mdi:file-document";
     
-    let selectedFiles: Set<number> = new Set(); // Tracks selected files
+    let selectedFiles: boolean[] = []; // Tracks selected files
     let divRefs: { el: HTMLElement; id: number }[] = []; // Stores references with IDs
-    let divElements: HTMLElement[] = []; // Stores only HTMLElements for `bind:this`
-  
+
     async function updateFiles() {
         const updatedFiles = await get_files(path);
         files = updatedFiles;
     }
-  
+
     $: if (update) {
         (async () => {
             await updateFiles();
             update = false; // Reset update flag
         })();
     }
-  
+
     $: if (clicked?.filetype === "dir") {
         if (!path.endsWith("\\")) {
             path += "\\";
@@ -38,103 +37,108 @@
         update = true;
         clicked = null;
     }
-  
+
     // Selection Box Interface
     interface SelectionBox {
-      startX: number;
-      startY: number;
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      active: boolean;
+        startX: number;
+        startY: number;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        active: boolean;
     }
-  
+
     let selectionBox: SelectionBox = {
-      startX: 0,
-      startY: 0,
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
-      active: false
+        startX: 0,
+        startY: 0,
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        active: false
     };
-  
+
     function onPointerDown(event: PointerEvent) {
-      selectionBox.startX = event.clientX;
-      selectionBox.startY = event.clientY;
-      selectionBox.x = event.clientX;
-      selectionBox.y = event.clientY;
-      selectionBox.width = 0;
-      selectionBox.height = 0;
-      selectionBox.active = true;
-  
-      selectedFiles.clear(); // Reset selection
-  
-      document.addEventListener('pointermove', onPointerMove);
-      document.addEventListener('pointerup', onPointerUp);
+        selectionBox.startX = event.clientX;
+        selectionBox.startY = event.clientY;
+        selectionBox.x = event.clientX;
+        selectionBox.y = event.clientY;
+        selectionBox.width = 0;
+        selectionBox.height = 0;
+        selectionBox.active = true;
+
+        selectedFiles = []; // Reset selection
+
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
     }
-  
+
     function onPointerMove(event: PointerEvent) {
-      if (!selectionBox.active) return;
-  
-      // Compute correct box regardless of direction
-      selectionBox.x = Math.min(event.clientX, selectionBox.startX);
-      selectionBox.y = Math.min(event.clientY, selectionBox.startY);
-      selectionBox.width = Math.abs(event.clientX - selectionBox.startX);
-      selectionBox.height = Math.abs(event.clientY - selectionBox.startY);
-  
-      checkSelection();
+        if (!selectionBox.active) return;
+
+        // Compute correct box regardless of direction
+        selectionBox.x = Math.min(event.clientX, selectionBox.startX);
+        selectionBox.y = Math.min(event.clientY, selectionBox.startY);
+        selectionBox.width = Math.abs(event.clientX - selectionBox.startX);
+        selectionBox.height = Math.abs(event.clientY - selectionBox.startY);
+
+        checkSelection();
     }
-  
+
     function onPointerUp() {
-      selectionBox.active = false;
-  
-      document.removeEventListener('pointermove', onPointerMove);
-      document.removeEventListener('pointerup', onPointerUp);
+        selectionBox.active = false;
+
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', onPointerUp);
     }
 
-function checkSelection() {
-    selectedFiles.clear();
-    
-    const box = {
-        left: selectionBox.x,
-        top: selectionBox.y,
-        right: selectionBox.x + selectionBox.width,
-        bottom: selectionBox.y + selectionBox.height
-    };
-    divRefs.forEach(({ el, id }) => {
-        const rect = el.getBoundingClientRect();
-        //console.log(
-        //    "left" + rect.left +
-        //    "right" + rect.right +
-        //    "top" + rect.top +
-        //    "bottom" + rect.bottom
-        //);
-        //console.log("test");
-        if (
-            rect.left < box.right &&
-            rect.right > box.left &&
-            rect.top < box.bottom &&
-            rect.bottom > box.top
-        ) {
-            selectedFiles.add(id);
-        }
-    });
-    console.log(selectedFiles);
-}
+    function checkSelection() {
+        selectedFiles = [];
 
-function bindDiv(el: HTMLElement, id: number) {
-    if (!el) return;
+        const box = {
+            left: selectionBox.x,
+            top: selectionBox.y,
+            right: selectionBox.x + selectionBox.width,
+            bottom: selectionBox.y + selectionBox.height
+        };
+        divRefs.forEach(({ el, id }) => {
+            const rect = el.getBoundingClientRect();
+            //console.log(
+            //    "left" + rect.left +
+            //    "right" + rect.right +
+            //    "top" + rect.top +
+            //    "bottom" + rect.bottom
+            //);
+            //console.log("test");
+            //console.log("id: " + id);
+            if (
+                rect.left < box.right &&
+                rect.right > box.left &&
+                rect.top < box.bottom &&
+                rect.bottom > box.top
+            ) {
+                selectedFiles.push(true);
+            }
+            else {
+                selectedFiles.push(false);
+            }
+        });
+        //console.log("selected files");
+        //console.log(selectedFiles);
+    }
 
-    // Remove duplicates before pushing
-    divRefs = divRefs.filter(ref => ref.id !== id);
-    divRefs.push({ el, id });
-    console.log("pushed");
-    console.log(divRefs);
-}
+    function bindDiv(el: HTMLElement, id: number) {
+        if (!el) return;
 
-$: {
+        // Remove duplicates before pushing
+        divRefs = divRefs.filter(ref => ref.id !== id);
+        divRefs.push({ el, id });
+        //console.log("pushed");
+        //console.log(divRefs);
+    }
+
+    $: {
         if (update) {
             let files = document.getElementsByClassName("file");
             let elems: HTMLElement[] = Array.from(files) as HTMLElement[];
