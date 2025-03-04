@@ -21,6 +21,7 @@
     let sidebarWidth = 100;
     let previewWidth = 100;
     let resizingTarget: "sidebar" | "preview" | null = null;
+    let selectedFiles: { selected: boolean, path: string }[];
 
     onMount(() => {
         isLoading = false;
@@ -81,6 +82,7 @@
                     bind:update
                     bind:searchTerm
                     bind:history
+                    bind:selectedFiles
                 />
             </div>
             <!-- Preview Resizer -->
