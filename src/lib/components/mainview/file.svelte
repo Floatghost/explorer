@@ -10,6 +10,7 @@
     export let fileinfo: ElementInfo;
     export let history: History;
     export let path: string;
+    export let selected: Set<number>;
 
     function push_history(input: ElementInfo) {
         if (input.filetype === "dir") {
@@ -28,9 +29,14 @@
         }
     }
 
+    $: {
+            console.log("in file");
+            console.log(selected);
+    }
+
 </script>
 
-<div class="file-wrapper">
+<div class="file-wrapper-{selected ? "selected" : "not"}">
     <button class="file-btn" on:click={() => {clicked = fileinfo; push_history(clicked)}} on:dblclick={() => {clicked = fileinfo}} >
         {#if fileicontype == "svg"}
             <Icon width=100% icon={fileiconpath} height=auto />
@@ -47,7 +53,15 @@
 </div>
 
 <style>
-    .file-wrapper {
+    .file-wrapper-not {
+        border: 1px solid transparent;
+        display: flex;
+        justify-content: center;
+        width: var(--file-width);
+        position: relative; /* Ensures absolute positioning of tooltip is relative to this */
+    }
+    .file-wrapper-selected {
+        border: 1px solid aliceblue;
         display: flex;
         justify-content: center;
         width: var(--file-width);
