@@ -18,15 +18,15 @@
     let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
     let update: boolean = false;
 
-    let sidebarWidth = 200;
-    let previewWidth = 200;
+    let sidebarWidth = 100;
+    let previewWidth = 100;
     let resizingTarget: "sidebar" | "preview" | null = null;
 
     onMount(() => {
         isLoading = false;
         themeStore.init();
-        update = true;
         themeStore.setTheme("abyss");
+        update = true;
     });
 
     function startResize(target: "sidebar" | "preview") {

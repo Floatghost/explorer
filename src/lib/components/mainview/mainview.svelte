@@ -14,7 +14,10 @@
     let fileicontype: string = "svg";
     let fileiconpath: string = "mdi:file-document";
     
-    let selectedFiles: boolean[] = []; // Tracks selected files
+    let selectedFiles: {
+        selected: boolean,
+        path: string,
+    }[] = []; // Tracks selected files
     let divRefs: { el: HTMLElement; id: number }[] = []; // Stores references with IDs
 
     async function updateFiles() {
@@ -25,6 +28,12 @@
     $: if (update) {
         (async () => {
             await updateFiles();
+
+            let files = document.getElementsByClassName("file");
+            let elems: HTMLElement[] = Array.from(files) as HTMLElement[];
+            elems.forEach((el, i) => {
+                bindDiv(el, i);
+            });
             update = false; // Reset update flag
         })();
     }
@@ -118,10 +127,10 @@
                 rect.top < box.bottom &&
                 rect.bottom > box.top
             ) {
-                selectedFiles.push(true);
+                selectedFiles.push({selected: true, path: ""});
             }
             else {
-                selectedFiles.push(false);
+                selectedFiles.push({selected: false, path: ""});
             }
         });
         //console.log("selected files");
@@ -137,17 +146,6 @@
         //console.log("pushed");
         //console.log(divRefs);
     }
-
-    $: {
-        if (update) {
-            let files = document.getElementsByClassName("file");
-            let elems: HTMLElement[] = Array.from(files) as HTMLElement[];
-            elems.forEach((el, i) => {
-                bindDiv(el, i);
-            });
-        }
-    }
-
 </script>
 
 <!-- Svelte HTML -->
@@ -214,5 +212,24 @@
         overflow-x: hidden;
         overflow-y: auto;
         max-height: calc(100vh - 50px);
+    }
+
+    
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--primary-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--text-unfocused);
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-color);
     }
 </style>
