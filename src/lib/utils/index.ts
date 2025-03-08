@@ -6,7 +6,7 @@ export function removefocus(html_obj: Element | null): null {
     return null;
 }
 
-import type { DirInfo, History } from "$lib/types";
+import type { DirInfo, History, Update } from "$lib/types";
 import { invoke } from "@tauri-apps/api/core";
 
 export async function get_files(path: string): Promise<DirInfo> {
@@ -57,9 +57,16 @@ export function delete_all_history_above(history: History, index: number): Histo
     return out;
 }
 
+export function push_history(history: History, new_path: string): History {
+    history.paths.push(new_path);
+    history.index = history.paths.length -1;
+
+    return history;
+}
+
 export async function search(query: string): Promise<DirInfo> {
     try {
-        const out: DirInfo = await invoke("search", { query: query, engine: "own" }) as DirInfo;
+        const out: DirInfo = await invoke("search", { query: query, engine: "everything" }) as DirInfo;
         console.log(out);
         return out;
     }
@@ -77,3 +84,11 @@ export async function search(query: string): Promise<DirInfo> {
     }
 }
 
+export function set_update(input: boolean): Update {
+    let out: Update = {
+        get_files: input,
+        search: input,
+    };
+
+    return out;
+}

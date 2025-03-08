@@ -9,14 +9,15 @@
     import "$lib/app.css";
     import { onMount } from 'svelte';
     import { themeStore } from "$lib/stores";
-    import type { DirInfo, History } from "$lib/types";
+    import type { DirInfo, History, Update } from "$lib/types";
+    import { set_update } from "$lib/utils";
 
     let isLoading: boolean = true;
     let searchTerm: string = "";
     let history: History = { paths: ["C:\\"], index: 0 };
     let path: string = "C:\\";
     let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
-    let update: boolean = false;
+    let update: Update = set_update(false);
 
     let sidebarWidth = 100;
     let previewWidth = 100;
@@ -27,7 +28,8 @@
         isLoading = false;
         themeStore.init();
         themeStore.setTheme("abyss");
-        update = true;
+        update = set_update(true);
+        update.search = false;
     });
 
     function startResize(target: "sidebar" | "preview") {

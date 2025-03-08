@@ -32,3 +32,8 @@ export interface History {
     paths: string[],
     index: number,
 }
+
+export interface Update {
+    get_files: boolean,
+    search: boolean,
+}

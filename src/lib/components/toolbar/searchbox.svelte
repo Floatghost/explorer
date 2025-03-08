@@ -1,7 +1,7 @@
 <script lang="ts">
     import {
         removefocus
-    } from "$lib/utils/index"
+    } from "$lib/utils/index";
 
     export let searchTerm: string;
     export let placeholder: string = "Search";

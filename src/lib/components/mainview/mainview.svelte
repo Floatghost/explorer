@@ -1,13 +1,12 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
     import { File } from "$lib/components/mainview/index";
-    import type { DirInfo, ElementInfo, History } from "$lib/types";
-    import { get_files } from "$lib/utils";
-  
+    import type { DirInfo, ElementInfo, History, Update } from "$lib/types";
+    import { get_files, search, push_history } from "$lib/utils";
+
     export let path: string;
     export let history: History;
     export let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
-    export let update: boolean;
+    export let update: Update;
     export let searchTerm: string;
 
     let clicked: ElementInfo | null = null;
@@ -24,7 +23,7 @@
         selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
     }
 
-    $: if (update) {
+    $: if (update.get_files) {
         (async () => {
             await updateFiles();
 
@@ -33,8 +32,30 @@
             elems.forEach((el, i) => {
                 bindDiv(el, i);
             });
-            update = false; // Reset update flag
+            update.get_files = false; // Reset update flag
         })();
+    }
+
+    $: if (update.search) {
+        if (path.startsWith("Search") && path.length > 6) {
+            let temp = path.startsWith("Search") ? path.slice(6) : path;
+            search(temp).then(result => {
+                files = result;
+                path = "Search";
+            }).catch(error => {
+                console.error("Search failed:", error);
+            });
+        }
+        else {
+            search(searchTerm).then(result => {
+                files = result;
+                path = "Search";
+                history = push_history(history, "Search" + searchTerm);
+            }).catch(error => {
+                console.error("Search failed:", error);
+            });
+        }
+        update.search = false;
     }
 
     $: if (clicked?.filetype === "dir") {
@@ -42,7 +63,7 @@
             path += "\\";
         }
         path += clicked.name;
-        update = true;
+        update.get_files = true;
         clicked = null;
     }
 
