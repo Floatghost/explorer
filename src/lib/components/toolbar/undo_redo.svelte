@@ -1,9 +1,8 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
-    import type {History} from "$lib/types/index";
-    import { updated } from "$app/stores";
+    import type {History, Update} from "$lib/types/index";
 
-    export let refresh: boolean;
+    export let refresh: Update;
     export let history: History;
     export let path: string;
 
@@ -11,18 +10,32 @@
         if (history?.paths[history.index-1]) {
             history.index -= 1;
             path = history.paths[history.index];
-            refresh = true;
+            
+            if (path.startsWith("Search")) {
+                refresh.search = true;
+            } else {
+                refresh.get_files = true;
+            }
         }
     }
     function redo() {
         if (history?.paths[history.index+1]) {
             history.index += 1;
             path = history.paths[history.index];
-            refresh = true;
+            
+            if (path.startsWith("Search")) {
+                refresh.search = true;
+            } else {
+                refresh.get_files = true;
+            }
         }
     }
     function refresh_btn() {
-        refresh = true;
+        if (path.startsWith("Search")) {
+            refresh.search = true;
+        } else {
+            refresh.get_files = true;
+        }
     }
 
 </script>
