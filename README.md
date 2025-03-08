@@ -33,3 +33,5 @@ npm install svelte-i18n
 - Add https://github.com/probablykasper/svelte-tauri-filedrop to add filedrop to main content
 - Add deeplinking so app gets opened by default https://v2.tauri.app/plugin/deep-linking/
 
+<span style="color:red font-size:large"> BEFORE RELEASE </span>.
+- remove devtools feature flag for tauri in cargo.toml
