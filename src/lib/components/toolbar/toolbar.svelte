@@ -35,7 +35,7 @@
     background-color: var(--secondary-color);
 }
 .toolbar:hover {
-    border-color: var(--border-color-light);
+    border-color: var(--selected-color);
 }
 .toolbar-content {
     display: flex;

@@ -28,4 +28,5 @@ chrono = "0.4.38"
 tauri-plugin-fs = "2"
 image = "0.25.5"
 uuid = "1.12.1"
+rusqlite = "0.34.0"
 
