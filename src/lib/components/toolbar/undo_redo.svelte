@@ -81,19 +81,19 @@
 }
 .btn-undo:hover {
     background-color: var(--hover-color);
-    border-color: var(--border-color-light);
+    border-color: var(--selected-color);
     color: var(--text-color);
     transition: 0.5s ease;
 }
 .btn-redo:hover {
     background-color: var(--hover-color);
-    border-color: var(--border-color-light);
+    border-color: var(--selected-color);
     color: var(--text-color);
     transition: 0.5s ease;
 }
 .btn-refresh:hover {
     background-color: var(--hover-color);
-    border-color: var(--border-color-light);
+    border-color: var(--selected-color);
     color: var(--text-color);
     transition: 0.5s ease;
 }

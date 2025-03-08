@@ -4,18 +4,28 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Element {
-    filetype: String,
-    name: String,
-    size: u64,
-    icon: String,
+    pub filetype: String,
+    pub name: String,
+    pub size: u64,
+    pub icon: String,
+}
+
+impl Default for Element {
+    fn default() -> Self {
+        Element { filetype: "".to_string(),
+        name: "".to_string(),
+        size: 0,
+        icon: "".to_string()
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct DirInfo {
-    name: String,
-    sub_dirs: i32,
-    sub_files: i32,
-    elements: Vec<Element>,
+    pub name: String,
+    pub sub_dirs: i32,
+    pub sub_files: i32,
+    pub elements: Vec<Element>,
 }
 
 impl Default for DirInfo {

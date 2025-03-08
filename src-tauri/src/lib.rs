@@ -3,6 +3,8 @@
 
 mod files;
 use files::read::get_dir_info;
+mod search;
+use search::search;
 
 use tauri_plugin_fs::FsExt;
 
@@ -16,7 +18,7 @@ pub fn run() {
             //dbg!(scope.is_allowed(r"D://"));
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![get_dir_info])
+        .invoke_handler(tauri::generate_handler![get_dir_info, search])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

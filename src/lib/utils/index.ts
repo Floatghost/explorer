@@ -57,4 +57,23 @@ export function delete_all_history_above(history: History, index: number): Histo
     return out;
 }
 
+export async function search(query: string): Promise<DirInfo> {
+    try {
+        const out: DirInfo = await invoke("search", { query: query, engine: "own" }) as DirInfo;
+        console.log(out);
+        return out;
+    }
+    catch (error) {
+        console.error("Error fetching directory info:", error);
+        console.error("function input: " + query);
+        
+        // Return an empty DirInfo object if an error occurs
+        return {
+            name: "error",
+            sub_dirs: 0,
+            sub_files: 0,
+            elements: [],
+        };
+    }
+}
 

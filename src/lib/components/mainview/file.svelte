@@ -57,6 +57,7 @@
         justify-content: center;
         width: var(--file-width);
         position: relative; /* Ensures absolute positioning of tooltip is relative to this */
+        border: 1px solid transparent;
     }
     .file-wrapper-selected {
         border: 1px solid aliceblue;
