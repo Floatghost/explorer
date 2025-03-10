@@ -66,7 +66,7 @@ export function push_history(history: History, new_path: string): History {
 
 export async function search(query: string): Promise<DirInfo> {
     try {
-        const out: DirInfo = await invoke("search", { query: query, engine: "everything" }) as DirInfo;
+        const out: DirInfo = await invoke("search", { query: query, engine: "everything", max_elements: 100 }) as DirInfo;
         console.log(out);
         return out;
     }

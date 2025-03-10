@@ -5,10 +5,10 @@ use everything_sdk::*;
 const FILE_ATTRIBUTE_DIRECTORY: u32 = 16;
 
 #[tauri::command(rename_all="snake_case")]
-pub fn search(query: String, engine: String) -> DirInfo {
+pub fn search(query: String, engine: String, max_elements: u32) -> DirInfo {
     let out = match engine {
-        _ if engine == "everything" => search_everything(query),
-        _ if engine == "own" => search_own(query),
+        _ if engine == "everything" => search_everything(query, max_elements),
+        _ if engine == "own" => search_own(query, max_elements),
         _ => {
             let mut temp = DirInfo::default();
             temp.name = "couldn't find engine".to_string();
@@ -20,7 +20,7 @@ pub fn search(query: String, engine: String) -> DirInfo {
 }
 
 #[allow(dead_code)]
-fn search_everything(query: String) -> DirInfo {
+fn search_everything(query: String, max_elements: u32) -> DirInfo {
     let mut out: DirInfo = DirInfo::default();
     out.name = "Search".to_string();
 
@@ -51,7 +51,7 @@ fn search_everything(query: String) -> DirInfo {
                         // file attributes can be found @ https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants
                         | RequestFlags::EVERYTHING_REQUEST_RUN_COUNT,
                 )
-                .set_max(5)
+                .set_max(max_elements)
                 .set_sort(SortType::EVERYTHING_SORT_DATE_RECENTLY_CHANGED_ASCENDING);
 
             // They have default value, check them in docs.
@@ -114,7 +114,7 @@ fn search_everything(query: String) -> DirInfo {
 }
 
 #[allow(dead_code)]
-fn search_own(query: String) -> DirInfo {
+fn search_own(query: String, max_elements: u32) -> DirInfo {
     let mut out: DirInfo = DirInfo::default();
 
     //using rusqlite
