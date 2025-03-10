@@ -1,11 +1,30 @@
 <script lang="ts">
-    import type { DirInfo } from "$lib/types"
+    import type { DirInfo } from "$lib/types";
+    import Icon from "@iconify/svelte";
+    import Settings from "./settings.svelte";
 
     export let files: DirInfo;
+    let settings_show: boolean = false;
+
+    function flip_settings_show() {
+        settings_show = !settings_show;
+    }
 </script>
 
 <div class="infobar-wrapper">
-    dirs: {files.sub_dirs} | files: {files.sub_files}
+    <div>
+        dirs: {files.sub_dirs} | files: {files.sub_files}
+    </div>
+    <div class="settings-container">
+        {#if settings_show}
+            <div class="settings-wrapper">
+                <Settings />
+            </div>
+        {/if}
+        <button class="settings-btn" on:click={flip_settings_show}>
+            <Icon icon="mdi:settings" />
+        </button>
+    </div>
 </div>
 
 <style>
@@ -18,8 +37,33 @@
         justify-content: space-between;
         padding: 0 10px;
         background-color: var(--secondary-color); /* Ensure visibility */
+        position: relative;
     }
     .infobar-wrapper:hover {
         border-color: var(--selected-color);
+    }
+    .settings-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+    .settings-btn {
+        background-color: var(--secondary-color);
+        border: 0px solid transparent;
+        color: var(--text-unfocused);
+    }
+    .settings-btn:hover {
+        color: var(--text-color);
+    }
+    .settings-wrapper {
+        position: absolute;
+        bottom: 100%; /* Places it above the button */
+        transform: translateX(-50%);
+        background: var(--background-color);
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 10;
     }
 </style>
