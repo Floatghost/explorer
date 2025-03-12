@@ -9,33 +9,20 @@
     function undo() {
         if (history?.paths[history.index-1]) {
             history.index -= 1;
-            path = history.paths[history.index];
             
-            if (path.startsWith("Search")) {
-                refresh.search = true;
-            } else {
-                refresh.get_files = true;
-            }
+            refresh.mainview = true;
         }
     }
     function redo() {
         if (history?.paths[history.index+1]) {
             history.index += 1;
-            path = history.paths[history.index];
             
-            if (path.startsWith("Search")) {
-                refresh.search = true;
-            } else {
-                refresh.get_files = true;
-            }
+            refresh.mainview = true;
         }
     }
     function refresh_btn() {
-        if (path.startsWith("Search")) {
-            refresh.search = true;
-        } else {
-            refresh.get_files = true;
-        }
+        
+        refresh.mainview = true;
     }
 
 </script>
