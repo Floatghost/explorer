@@ -1,6 +1,6 @@
+use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
-use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Element {
@@ -12,10 +12,11 @@ pub struct Element {
 
 impl Default for Element {
     fn default() -> Self {
-        Element { filetype: "".to_string(),
-        name: "".to_string(),
-        size: 0,
-        icon: "".to_string()
+        Element {
+            filetype: "".to_string(),
+            name: "".to_string(),
+            size: 0,
+            icon: "".to_string(),
         }
     }
 }
@@ -91,7 +92,8 @@ pub fn get_dir_info(path: String) -> DirInfo {
 }
 
 fn get_file_extension(file_path: std::path::PathBuf) -> Option<String> {
-    file_path.extension() // Get the extension as OsStr
+    file_path
+        .extension() // Get the extension as OsStr
         .and_then(|ext| ext.to_str()) // Convert OsStr to &str
         .map(|s| s.to_string()) // Convert &str to String
 }

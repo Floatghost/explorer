@@ -92,3 +92,55 @@ export function set_update(input: boolean): Update {
 
     return out;
 }
+
+import { exists, BaseDirectory, FileHandle, type FileInfo } from '@tauri-apps/plugin-fs';
+import { open } from '@tauri-apps/plugin-fs';
+
+export function load_settings() {
+    // Check if settings.json exists
+    exists('settings/settings.json', { baseDir: BaseDirectory.AppLocalData })
+        .then((fileExists) => {
+            console.log('File exists:', fileExists);
+        })
+        .catch((error) => {
+            console.error('Error checking file existence:', error);
+        });
+
+    let file: FileHandle;
+
+    // Open the settings.json file
+    open("settings/settings.json", {
+        read: true,
+        create: true, // Creates the file if it doesn’t exist
+        baseDir: BaseDirectory.AppLocalData,
+    })
+    .then((result) => {
+        file = result;
+        console.log('File opened:', file);
+
+        // Get file stats
+        return file.stat();
+    })
+    .then((stat) => {
+        console.log('File stats:', stat);
+
+        // Read file contents
+        const buf = new Uint8Array(stat.size);
+        return file.read(buf).then(() => ({ buf, stat }));
+    })
+    .then(({ buf }) => {
+        const textContents = new TextDecoder().decode(buf);
+        console.log('File contents:', textContents);
+        
+        // Close file after reading
+        return file.close();
+    })
+    .then(() => {
+        console.log('File closed successfully.');
+    })
+    .catch((error) => {
+        console.error('Error processing file:', error);
+    });
+}
+
+import { load } from '@tauri-apps/plugin-store';

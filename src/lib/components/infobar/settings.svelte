@@ -5,9 +5,6 @@
 </script>
 
 <div class="settings-wrapper">
-    <h1 style="">
-        Settings
-    </h1>
     <div style="display: flex;  flex-direction: row; gap:10px;">
         <button class="show_hiddenfiles">
             <Icon icon="mdi:file-hidden" />
