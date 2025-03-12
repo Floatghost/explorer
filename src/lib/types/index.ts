@@ -29,11 +29,18 @@ export interface ElementInfo {
 }
 
 export interface History {
-    paths: string[],
+    paths: History_entry[],
     index: number,
+}
+
+export interface History_entry {
+    get_function: string, //for example: "search", "filesystem"
+    get_input: string,  //for example: "this is an test search", "C:\Users\admin"
+    name_in_addressbar: string, //for example: "Search", "C:\Users\admin"
 }
 
 export interface Update {
     get_files: boolean,
     search: boolean,
+    mainview: boolean,
 }

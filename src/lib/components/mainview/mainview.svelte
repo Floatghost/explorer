@@ -1,7 +1,8 @@
 <script lang="ts">
     import { File } from "$lib/components/mainview/index";
     import type { DirInfo, ElementInfo, History, Update } from "$lib/types";
-    import { get_files, search, push_history } from "$lib/utils";
+    import { get_files, search, push_history, push_followup_history } from "$lib/utils";
+    import { error } from "@sveltejs/kit";
 
     export let path: string;
     export let history: History;
@@ -16,54 +17,52 @@
     export let selectedFiles: { selected: boolean, path: string }[] = []; // Tracks selected files
     let divRefs: { el: HTMLElement; id: number }[] = []; // Stores references with IDs
 
-    async function updateFiles() {
-        const updatedFiles = await get_files(path);
-        files = updatedFiles;
-
-        selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
-    }
-
-    $: if (update.get_files) {
-        (async () => {
-            await updateFiles();
-
-            let files = document.getElementsByClassName("file");
-            let elems: HTMLElement[] = Array.from(files) as HTMLElement[];
-            elems.forEach((el, i) => {
-                bindDiv(el, i);
-            });
-            update.get_files = false; // Reset update flag
-        })();
-    }
-
-    $: if (update.search) {
-        if (path.startsWith("Search") && path.length > 6) {
-            let temp = path.startsWith("Search") ? path.slice(6) : path;
-            search(temp).then(result => {
+    //update files
+    $: if (update.mainview) {
+        console.log(history);
+        if (history.paths[history.index].get_function === "search") {
+            search(history.paths[history.index].get_input).then(result => {
                 files = result;
-                path = "Search";
+                path = history.paths[history.index].name_in_addressbar;
             }).catch(error => {
                 console.error("Search failed:", error);
+            console.log("filesystem called");
             });
+            console.log("search function called");
+        }
+        else if (history.paths[history.index].get_function === "filesystem") {
+            (async () => {
+                const updatedFiles: DirInfo = await get_files(history.paths[history.index].get_input);
+                path = history.paths[history.index].name_in_addressbar;
+                files = updatedFiles;
+                console.log("files");
+                console.log(files);
+            })();
+            console.log("filesystem called");
         }
         else {
-            search(searchTerm).then(result => {
-                files = result;
-                path = "Search";
-                history = push_history(history, "Search" + searchTerm);
-            }).catch(error => {
-                console.error("Search failed:", error);
-            });
+            console.error("this get_function does not exist", history.paths[history.index].get_function);
+            //for some reason the get_function is undefined
         }
-        update.search = false;
+
+        selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
+
+        let filess = document.getElementsByClassName("file");
+        let elems: HTMLElement[] = Array.from(filess) as HTMLElement[];
+        elems.forEach((el, i) => {
+            bindDiv(el, i);
+        });
+
+        update.mainview = false;
     }
 
     $: if (clicked?.filetype === "dir") {
         if (!path.endsWith("\\")) {
             path += "\\";
         }
-        path += clicked.name;
-        update.get_files = true;
+        
+        history = push_followup_history(history, clicked);
+        update.mainview = true;
         clicked = null;
     }
 
