@@ -1,10 +1,10 @@
 use crate::files::read::{DirInfo, Element};
-use rusqlite::{Connection, Result};
 use everything_sdk::*;
+use rusqlite::{Connection, Result};
 
 const FILE_ATTRIBUTE_DIRECTORY: u32 = 16;
 
-#[tauri::command(rename_all="snake_case")]
+#[tauri::command(rename_all = "snake_case")]
 pub fn search(query: String, engine: String, max_elements: u32) -> DirInfo {
     let out = match engine {
         _ if engine == "everything" => search_everything(query, max_elements),
@@ -13,7 +13,7 @@ pub fn search(query: String, engine: String, max_elements: u32) -> DirInfo {
             let mut temp = DirInfo::default();
             temp.name = "couldn't find engine".to_string();
             temp
-        },
+        }
     };
 
     out
@@ -33,7 +33,6 @@ fn search_everything(query: String, max_elements: u32) -> DirInfo {
         Ok(false) => panic!("The Everything database has not been fully loaded now."),
         Err(EverythingError::Ipc) => panic!("Everything is required to run in the background."),
         _ => {
-            
             let mut searcher = everything.searcher();
 
             // Set the query parameters, chaining call is optional.
@@ -41,7 +40,7 @@ fn search_everything(query: String, max_elements: u32) -> DirInfo {
             //query input
             dbg!(&query);
             searcher.set_search(query);
-            
+
             searcher
                 .set_request_flags(
                     RequestFlags::EVERYTHING_REQUEST_FILE_NAME
@@ -79,7 +78,7 @@ fn search_everything(query: String, max_elements: u32) -> DirInfo {
                     item.size().unwrap(),
                     attributes,
                 );
-                
+
                 let is_directory = attributes & FILE_ATTRIBUTE_DIRECTORY != 0;
 
                 if is_directory {
@@ -99,7 +98,6 @@ fn search_everything(query: String, max_elements: u32) -> DirInfo {
                         icon: "".to_string(),
                     });
                 }
-
             }
 
             // Remember, because of global variables, there can only be one `everything`, `searcher`

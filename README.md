@@ -35,3 +35,4 @@ npm install svelte-i18n
 
 <span style="color:red font-size:large"> BEFORE RELEASE </span>.
 - remove devtools feature flag for tauri in cargo.toml
+- https://v2.tauri.app/plugin/store/ for store

@@ -10,7 +10,7 @@
     import { onMount } from 'svelte';
     import { themeStore } from "$lib/stores";
     import type { DirInfo, History, Update } from "$lib/types";
-    import { set_update } from "$lib/utils";
+    import { set_update, load_settings } from "$lib/utils";
 
     let isLoading: boolean = true;
     let searchTerm: string = "";
@@ -30,6 +30,7 @@
         themeStore.setTheme("abyss");
         update = set_update(true);
         update.search = false;
+        load_settings();
     });
 
     function startResize(target: "sidebar" | "preview") {
