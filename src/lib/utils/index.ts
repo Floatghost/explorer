@@ -6,7 +6,7 @@ export function removefocus(html_obj: Element | null): null {
     return null;
 }
 
-import type { DirInfo, History, Update } from "$lib/types";
+import type { DirInfo, ElementInfo, History, History_entry, Update } from "$lib/types";
 import { invoke } from "@tauri-apps/api/core";
 
 export async function get_files(path: string): Promise<DirInfo> {
@@ -44,7 +44,14 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
 export function delete_all_history_above(history: History, index: number): History {
     if (!history || !history.paths.length) {
         console.error("Error: Invalid history object.");
-        return { paths: ["C:\\"], index: 0 };
+        return {
+            paths: [{
+                get_function: "filesystem",
+                get_input: "C:\\",
+                name_in_addressbar: "C:\\",
+            }],
+            index: 0
+        };
     }
 
     let out: History = { paths: [], index: 0 };
@@ -57,11 +64,43 @@ export function delete_all_history_above(history: History, index: number): Histo
     return out;
 }
 
-export function push_history(history: History, new_path: string): History {
-    history.paths.push(new_path);
+export function push_history(
+    history: History,
+    function_name: string,
+    function_input: string,
+    name_in_addressbar: string
+    ): History
+    {
+    
+    history = delete_all_history_above(history, history.index);
+
+    history.paths.push({ //History_entry
+        get_function: function_name,
+        get_input: function_input,
+        name_in_addressbar: name_in_addressbar,
+    });
     history.index = history.paths.length -1;
 
     return history;
+}
+
+export function push_followup_history(history: History, followup_name: ElementInfo): History {
+    //todo still needs improvement for when clicking on dirs in the search
+    if (history.paths[history.index].get_function != "filesystem") {
+        return history;
+    }
+
+    if (followup_name.filetype != "dir") {
+        return history;
+    }
+
+    let new_get_input = history.paths[history.index].get_input;
+    if (!new_get_input.endsWith("\\")) {
+        new_get_input += "\\";
+    }
+    new_get_input += followup_name.name;
+
+    return push_history(history, "filesystem", new_get_input, new_get_input);
 }
 
 export async function search(query: string): Promise<DirInfo> {
@@ -88,6 +127,7 @@ export function set_update(input: boolean): Update {
     let out: Update = {
         get_files: input,
         search: input,
+        mainview: input,
     };
 
     return out;

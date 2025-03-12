@@ -14,7 +14,7 @@
 
     let isLoading: boolean = true;
     let searchTerm: string = "";
-    let history: History = { paths: ["C:\\"], index: 0 };
+    let history: History = { paths: [{get_function:"filesystem", get_input:"C:\\", name_in_addressbar:"C:\\"}], index: 0 };
     let path: string = "C:\\";
     let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
     let update: Update = set_update(false);
