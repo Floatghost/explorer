@@ -2,7 +2,7 @@
     import Icon from "@iconify/svelte"
     import "$lib/app.css"
     import type { ElementInfo, History } from "$lib/types";
-    import {formatBytes, delete_all_history_above} from "$lib/utils/index";
+    import {formatBytes, delete_all_history_above, push_followup_history} from "$lib/utils/index";
     
     export let fileicontype: string;
     export let fileiconpath: string;
@@ -22,10 +22,7 @@
                 parent_folder += "\\";
             }
 
-            history = delete_all_history_above(history, history.index);
-            history.paths.push( parent_folder + input.name);
-            history.index += 1;
-
+            push_followup_history(history, input);
 
             console.log("history paths: " + history.paths);
             console.log("history index: " + history.index);

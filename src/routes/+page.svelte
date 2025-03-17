@@ -17,7 +17,7 @@
     let history: History = { paths: [{get_function:"filesystem", get_input:"C:\\", name_in_addressbar:"C:\\"}], index: 0 };
     let path: string = "C:\\";
     let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
-    let update: Update = set_update(false);
+    let update: Update = {get_files: false, mainview: false, search: false};
 
     let sidebarWidth = 100;
     let previewWidth = 100;
@@ -28,8 +28,7 @@
         isLoading = false;
         themeStore.init();
         themeStore.setTheme("abyss");
-        update = set_update(true);
-        update.search = false;
+        update = {get_files: false, mainview: true, search: false};
         load_settings();
     });
 
