@@ -2,7 +2,7 @@
     import { File } from "$lib/components/mainview/index";
     import type { DirInfo, ElementInfo, History, Update } from "$lib/types";
     import { get_files, search, push_history, push_followup_history } from "$lib/utils";
-    import { error } from "@sveltejs/kit";
+    import { tick } from "svelte";
 
     export let path: string;
     export let history: History;
@@ -19,39 +19,36 @@
 
     //update files
     $: if (update.mainview) {
-        console.log(history);
-        if (history.paths[history.index].get_function === "search") {
-            search(history.paths[history.index].get_input).then(result => {
-                files = result;
-                path = history.paths[history.index].name_in_addressbar;
-            }).catch(error => {
-                console.error("Search failed:", error);
-            console.log("filesystem called");
-            });
-            console.log("search function called");
-        }
-        else if (history.paths[history.index].get_function === "filesystem") {
-            (async () => {
-                const updatedFiles: DirInfo = await get_files(history.paths[history.index].get_input);
-                path = history.paths[history.index].name_in_addressbar;
-                files = updatedFiles;
-                console.log("files");
-                console.log(files);
-            })();
-            console.log("filesystem called");
-        }
-        else {
-            console.error("this get_function does not exist", history.paths[history.index].get_function);
-            //for some reason the get_function is undefined
-        }
+        console.log("updating...");
+        (async () => {
+            try {
+                if (history.paths[history.index].get_function === "search") {
+                    files = await search(history.paths[history.index].get_input);
+                    path = history.paths[history.index].name_in_addressbar;
+                } else if (history.paths[history.index].get_function === "filesystem") {
+                    files = await get_files(history.paths[history.index].get_input);
+                    path = history.paths[history.index].name_in_addressbar;
+                } else {
+                    console.error("Unknown get_function:", history.paths[history.index].get_function);
+                }
 
-        selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
+                await tick(); // Ensure DOM updates before resetting selection
+
+                selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
+            } catch (err) {
+                console.error("Error fetching files:", err);
+            }
+
+            update.mainview = false;
+        })();
+        
 
         let filess = document.getElementsByClassName("file");
         let elems: HTMLElement[] = Array.from(filess) as HTMLElement[];
         elems.forEach((el, i) => {
             bindDiv(el, i);
         });
+
 
         update.mainview = false;
     }
