@@ -7,10 +7,10 @@
         Infobar
     } from "$lib/components/index";
     import "$lib/app.css";
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
     import { themeStore } from "$lib/stores";
     import type { DirInfo, History, Update } from "$lib/types";
-    import { set_update, load_settings } from "$lib/utils";
+    import { set_update, load_settings, search, get_files } from "$lib/utils";
 
     let isLoading: boolean = true;
     let searchTerm: string = "";
@@ -24,13 +24,30 @@
     let resizingTarget: "sidebar" | "preview" | null = null;
     let selectedFiles: { selected: boolean, path: string }[];
 
-    onMount(() => {
+    onMount(async () => {
         isLoading = false;
         themeStore.init();
         themeStore.setTheme("abyss");
         update = {get_files: false, mainview: true, search: false};
         load_settings();
+        await loadFiles();
     });
+
+    async function loadFiles() {
+        try {
+            if (history.paths[history.index].get_function === "search") {
+                files = await search(history.paths[history.index].get_input);
+            } else if (history.paths[history.index].get_function === "filesystem") {
+                files = await get_files(history.paths[history.index].get_input);
+            } else {
+                console.error("Unknown get_function:", history.paths[history.index].get_function);
+            }
+            await tick(); // Ensure DOM updates before resetting selection
+            selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
+        } catch (err) {
+            console.error("Error fetching files:", err);
+        }
+    }
 
     function startResize(target: "sidebar" | "preview") {
         resizingTarget = target;
