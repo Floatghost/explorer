@@ -19,36 +19,38 @@
 
     //update files
     $: if (update.mainview) {
-        console.log("updating...");
-        (async () => {
-            try {
-                if (history.paths[history.index].get_function === "search") {
-                    files = await search(history.paths[history.index].get_input);
-                    path = history.paths[history.index].name_in_addressbar;
-                } else if (history.paths[history.index].get_function === "filesystem") {
-                    files = await get_files(history.paths[history.index].get_input);
-                    path = history.paths[history.index].name_in_addressbar;
-                } else {
-                    console.error("Unknown get_function:", history.paths[history.index].get_function);
-                }
-
-                await tick(); // Ensure DOM updates before resetting selection
-
-                selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
-            } catch (err) {
-                console.error("Error fetching files:", err);
-            }
-
-            update.mainview = false;
-        })();
+        async () => {
+            await tick();
+        };
+        loadFiles();
         
+    }
+
+    async function loadFiles() {
+        console.log("updating...");
+        try {
+            if (history.paths[history.index].get_function === "search") {
+                files = await search(history.paths[history.index].get_input);
+                path = history.paths[history.index].name_in_addressbar;
+            } else if (history.paths[history.index].get_function === "filesystem") {
+                files = await get_files(history.paths[history.index].get_input);
+                path = history.paths[history.index].name_in_addressbar;
+            } else {
+                console.error("Unknown get_function:", history.paths[history.index].get_function);
+            }
+            
+            await tick(); // Ensure DOM updates before resetting selection
+
+            selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
+        } catch (err) {
+            console.error("Error fetching files:", err);
+        }
 
         let filess = document.getElementsByClassName("file");
         let elems: HTMLElement[] = Array.from(filess) as HTMLElement[];
         elems.forEach((el, i) => {
             bindDiv(el, i);
         });
-
 
         update.mainview = false;
     }

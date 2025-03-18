@@ -13,6 +13,7 @@ export async function get_files(path: string): Promise<DirInfo> {
     try {
         // Await the result of the Tauri backend function
         const out: DirInfo = await invoke("get_dir_info", { path }) as DirInfo;
+        console.log(out);
         return out; // Return the populated DirInfo object
     } catch (error) {
         console.error("Error fetching directory info:", error);
