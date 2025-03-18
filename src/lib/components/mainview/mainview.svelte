@@ -41,7 +41,16 @@
             
             await tick(); // Ensure DOM updates before resetting selection
 
-            selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
+            selectedFiles = [];
+            for(let i = 0; i < files.elements.length; i++) {
+                selectedFiles.push({
+                    selected: false, 
+                    path: files.elements[i].name.startsWith("\\") ? 
+                        files.elements[i].name : 
+                        path + (path.endsWith("\\") ? "" : "\\") + files.elements[i].name
+                });
+            }
+            selectedFiles = selectedFiles;
         } catch (err) {
             console.error("Error fetching files:", err);
         }
