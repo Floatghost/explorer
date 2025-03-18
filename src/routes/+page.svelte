@@ -109,10 +109,15 @@
 
             <!-- Preview -->
             <div class="preview" style="width: {previewWidth}px;">
-                <Preview />
+                <Preview
+                    bind:selectedFiles
+                />
             </div>
         </div>
-        <Infobar bind:files />
+        <Infobar
+            bind:files
+            bind:history
+        />
     </div>
 {/if}
 

@@ -1,9 +1,10 @@
 <script lang="ts">
-    import type { DirInfo } from "$lib/types";
+    import type { DirInfo, History } from "$lib/types";
     import Icon from "@iconify/svelte";
     import Settings from "./settings.svelte";
 
     export let files: DirInfo;
+    export let history: History;
     let settings_show: boolean = false;
 
     function flip_settings_show() {
@@ -14,6 +15,9 @@
 <div class="infobar-wrapper">
     <div>
         dirs: {files.sub_dirs} | files: {files.sub_files}
+    </div>
+    <div>
+        {history.paths[history.index].get_function}: {history.paths[history.index].get_input}
     </div>
     <div class="settings-container">
         {#if settings_show}
