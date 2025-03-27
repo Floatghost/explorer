@@ -4,6 +4,8 @@ use rusqlite::{Connection, Result};
 
 const FILE_ATTRIBUTE_DIRECTORY: u32 = 16;
 
+#[allow(dead_code)]
+
 #[tauri::command(rename_all = "snake_case")]
 pub fn search(query: String, engine: String, max_elements: u32) -> DirInfo {
     let out = match engine {

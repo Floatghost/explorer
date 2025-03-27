@@ -2,7 +2,7 @@
     import Icon from "@iconify/svelte"
     import "$lib/app.css"
     import type { ElementInfo, History } from "$lib/types";
-    import {formatBytes, delete_all_history_above, push_followup_history} from "$lib/utils/index";
+    import {formatBytes, delete_all_history_above, push_followup_history, removefocus, addfocus} from "$lib/utils/index";
     
     export let fileicontype: string;
     export let fileiconpath: string;
@@ -29,9 +29,23 @@
         }
     }
 
+    $: {
+        let temp = document.getElementsByClassName("file-btn");
+
+        for (let i = 0; i < temp.length; i++) {
+            if (selected.selected == true && !document.hasFocus()) {
+                addfocus(temp[i]);
+            }
+            else if (selected.selected == false) {
+                removefocus(temp[i]);
+            }
+        }
+        
+    }
+
 </script>
 
-<div class="file-wrapper-{selected.selected ? "selected" : "not"}">
+<div class="file-wrapper-not">
     <button class="file-btn" on:click={() => {clicked = fileinfo; push_history(clicked)}} on:dblclick={() => {clicked = fileinfo}} >
         {#if fileicontype == "svg"}
             <Icon width=100% icon={fileiconpath} height=auto />

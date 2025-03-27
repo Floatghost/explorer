@@ -21,9 +21,8 @@
     $: if (update.mainview) {
         async () => {
             await tick();
+            loadFiles();
         };
-        loadFiles();
-        
     }
 
     async function loadFiles() {
@@ -114,7 +113,6 @@
     function onPointerMove(event: PointerEvent) {
         if (!selectionBox.active) return;
 
-        // Compute correct box regardless of direction
         selectionBox.x = Math.min(event.clientX, selectionBox.startX);
         selectionBox.y = Math.min(event.clientY, selectionBox.startY);
         selectionBox.width = Math.abs(event.clientX - selectionBox.startX);
@@ -142,14 +140,7 @@
         };
         divRefs.forEach(({ el, id }) => {
             const rect = el.getBoundingClientRect();
-            //console.log(
-            //    "left" + rect.left +
-            //    "right" + rect.right +
-            //    "top" + rect.top +
-            //    "bottom" + rect.bottom
-            //);
-            //console.log("test");
-            //console.log("id: " + id);
+
             if (
                 rect.left < box.right &&
                 rect.right > box.left &&
@@ -190,6 +181,7 @@
 
     <div class="files-wrapper">
         {#each files.elements as file, i}
+            {console.log("adding file: ", file, " i: ", i)}
             <div class="file"> <!-- ✅ Store reference safely -->
                 <File
                     bind:clicked

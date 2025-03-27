@@ -4,7 +4,7 @@
 
 <div class="preview-wrapper">
     <div class="name">
-        {console.log("preview")}{console.log(selectedFiles)}
+        
     </div>
 </div>
 
