@@ -29,23 +29,26 @@
         }
     }
 
-    $: {
-        let temp = document.getElementsByClassName("file-btn");
-
-        for (let i = 0; i < temp.length; i++) {
-            if (selected.selected == true && !document.hasFocus()) {
-                addfocus(temp[i]);
-            }
-            else if (selected.selected == false) {
-                removefocus(temp[i]);
-            }
+    $: if (selected !== undefined) {
+        if (selected.selected === true) {
+            // addfocus(temp[i]);
+            change_name("file_wrapper", "file-wrapper-selected");
+            //console.log("found true");
+        } else if (selected.selected === false) {
+            // removefocus(temp[i]);
+            change_name("file_wrapper", "file-wrapper-not");
+            //console.log("selected.selected false");
         }
-        
+    }
+
+
+    function change_name(id: string, new_name: string) {
+        document.getElementById(id)?.setAttribute("name", new_name);
     }
 
 </script>
 
-<div class="file-wrapper-not">
+<div class="file-wrapper-not" id="file_wrapper">
     <button class="file-btn" on:click={() => {clicked = fileinfo; push_history(clicked)}} on:dblclick={() => {clicked = fileinfo}} >
         {#if fileicontype == "svg"}
             <Icon width=100% icon={fileiconpath} height=auto />

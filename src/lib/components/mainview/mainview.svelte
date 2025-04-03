@@ -21,8 +21,8 @@
     $: if (update.mainview) {
         async () => {
             await tick();
-            loadFiles();
         };
+        loadFiles();
     }
 
     async function loadFiles() {
@@ -56,6 +56,7 @@
 
         let filess = document.getElementsByClassName("file");
         let elems: HTMLElement[] = Array.from(filess) as HTMLElement[];
+        console.log("before bindDiv call");
         elems.forEach((el, i) => {
             bindDiv(el, i);
         });
@@ -148,6 +149,7 @@
                 rect.bottom > box.top
             ) {
                 selectedFiles[id].selected = true;
+                //console.log("set to true");
             }
         });
         //console.log("selected files");
@@ -163,6 +165,8 @@
         //console.log("pushed");
         //console.log(divRefs);
     }
+
+    //if (selectedFiles[0].selected !== undefined) {selectedFiles[0].selected = true}
 </script>
 
 <!-- Svelte HTML -->
@@ -181,7 +185,6 @@
 
     <div class="files-wrapper">
         {#each files.elements as file, i}
-            {console.log("adding file: ", file, " i: ", i)}
             <div class="file"> <!-- ✅ Store reference safely -->
                 <File
                     bind:clicked
