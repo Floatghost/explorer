@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { File } from "$lib/components/mainview/index";
+    import { File, Contextmenu } from "$lib/components/mainview/index";
     import type { DirInfo, ElementInfo, History, Update } from "$lib/types";
     import { get_files, search, push_history, push_followup_history } from "$lib/utils";
     import { tick } from "svelte";
@@ -9,6 +9,13 @@
     export let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
     export let update: Update;
     export let searchTerm: string;
+    export let contextmenu_info: {
+        show: boolean,
+        pos: {x: number, y: number},
+    };
+    export let settings_info: {
+        show: boolean,
+    };
 
     let clicked: ElementInfo | null = null;
     let fileicontype: string = "svg";
@@ -168,6 +175,11 @@
 
     //if (selectedFiles[0].selected !== undefined) {selectedFiles[0].selected = true}
 </script>
+
+<Contextmenu
+    bind:contextmenu_info
+    bind:settings_info
+/>
 
 <!-- Svelte HTML -->
 <div class="mainview-wrapper" on:pointerdown={onPointerDown}>

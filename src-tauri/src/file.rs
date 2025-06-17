@@ -77,7 +77,6 @@ fn get_file_info(file_path: &str) -> Result<FileInfo, ()> {
     // Get file metadata
     let file_metadata = fs::metadata(file_path).map_err(|_| ())?;
 
-    // Use Path for safer path manipulation
     let path = Path::new(file_path);
 
     // Get the file name

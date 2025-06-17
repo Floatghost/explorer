@@ -119,5 +119,5 @@ fn search_own(query: String, max_elements: u32) -> DirInfo {
 
     //using rusqlite
 
-    out
+    todo!();
 }
