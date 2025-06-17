@@ -5,10 +5,12 @@
 
     export let files: DirInfo;
     export let history: History;
-    let settings_show: boolean = false;
+    export let settings_info: {
+        show: boolean,
+    };
 
     function flip_settings_show() {
-        settings_show = !settings_show;
+        settings_info.show = !settings_info.show;
     }
 </script>
 
@@ -20,7 +22,7 @@
         {history.paths[history.index].get_function}: {history.paths[history.index].get_input}
     </div>
     <div class="settings-container">
-        {#if settings_show}
+        {#if settings_info.show}
             <div class="settings-wrapper">
                 <Settings />
             </div>
