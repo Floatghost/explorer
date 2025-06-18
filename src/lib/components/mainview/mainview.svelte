@@ -30,6 +30,14 @@
             await tick();
         };
         loadFiles();
+        //update.sidebar = true; // for some reason long loop loading folders over and over agin in sidebar
+    }
+
+    $: if (update.sidebar) {
+        update.sidebar = false;
+        (async () => {
+            loadFiles();
+        })();
     }
 
     $: if (update.search) {

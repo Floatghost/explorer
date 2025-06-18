@@ -136,6 +136,7 @@ export function set_update(input: boolean): Update {
         get_files: input,
         search: input,
         mainview: input,
+        sidebar: input,
     };
 
     return out;

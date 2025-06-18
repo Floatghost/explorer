@@ -90,27 +90,22 @@ Inspired from: Context Menu https://svelte.dev/repl/3a33725c3adb4f57b46b597f9dad
     }
     
     function addItem(): void {
-        content.textContent = "Add and item...";
-        console.log(content.textContent);
+        //TODO
     }
     
     function open_with(): void {
-        content.textContent = "Printed...";
-        console.log(content.textContent);
+        //TODO
     }
     
     function open(): void {
-        content.textContent = "Zooom...";
-        console.log(content.textContent);
+        //TODO
     }
     
     function remove(): void {
-        content.textContent = "Removed...";
-        console.log(content.textContent);
+        //TODO
     }
     
     function setting(): void {
-        content.textContent = "Settings...";
         settings_info.show = !settings_info.show;
     }
     
@@ -223,8 +218,6 @@ Inspired from: Context Menu https://svelte.dev/repl/3a33725c3adb4f57b46b597f9dad
         margin: 5px 0px;
     }
 </style>
-
-<div class="content" bind:this={content}>Right click somewhere!</div>
 
 {#if contextmenu_info.show}
 <nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px; z-index: 9999;">
