@@ -4,6 +4,7 @@ use std::path::Path;
 
 #[derive(Serialize, Deserialize)]
 pub struct Element {
+    pub path: String,
     pub filetype: String,
     pub name: String,
     pub size: u64,
@@ -13,6 +14,7 @@ pub struct Element {
 impl Default for Element {
     fn default() -> Self {
         Element {
+            path: "".to_string(),
             filetype: "".to_string(),
             name: "".to_string(),
             size: 0,
@@ -66,6 +68,7 @@ pub fn get_dir_info(path: String) -> DirInfo {
 
             if metadata.is_dir() {
                 out.elements.push(Element {
+                    path: n.path().display().to_string(),
                     filetype: "dir".to_string(),
                     name,
                     size: metadata.len(),
@@ -75,6 +78,7 @@ pub fn get_dir_info(path: String) -> DirInfo {
             } else if metadata.is_file() {
                 let ext = get_file_extension(n.path());
                 out.elements.push(Element {
+                    path: n.path().display().to_string(),
                     filetype: ext.unwrap_or_else(|| "unknown".to_string()), // Handle None case
                     name,
                     size: metadata.len(),

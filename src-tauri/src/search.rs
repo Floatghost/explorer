@@ -81,11 +81,12 @@ fn search_everything(query: String, max_elements: u32) -> DirInfo {
                     attributes,
                 );
 
-                let is_directory = attributes & FILE_ATTRIBUTE_DIRECTORY != 0;
+                let is_not_directory = !(attributes & FILE_ATTRIBUTE_DIRECTORY != 0);
 
-                if is_directory {
+                if is_not_directory {
                     out.sub_dirs += 1;
                     out.elements.push(Element {
+                        path: full_path.display().to_string(),
                         filetype: "txt".to_string(),
                         name: item.filename().unwrap().to_str().unwrap().to_string(),
                         size: item.size().unwrap(),
@@ -94,6 +95,7 @@ fn search_everything(query: String, max_elements: u32) -> DirInfo {
                 } else {
                     out.sub_files += 1;
                     out.elements.push(Element {
+                        path: full_path.display().to_string(),
                         filetype: "dir".to_string(),
                         name: item.filename().unwrap().to_str().unwrap().to_string(),
                         size: item.size().unwrap(),

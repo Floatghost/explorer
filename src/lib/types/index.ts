@@ -22,6 +22,7 @@ export interface DirInfo {
 }
 
 export interface ElementInfo {
+    path: string,
     filetype: string,
     name: string,
     size: number,

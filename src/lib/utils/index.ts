@@ -94,9 +94,9 @@ export function push_history(
 
 export function push_followup_history(history: History, followup_name: ElementInfo): History {
     //todo still needs improvement for when clicking on dirs in the search
-    if (history.paths[history.index].get_function != "filesystem") {
-        return history;
-    }
+    //if (history.paths[history.index].get_function != "filesystem") {
+    //    return history;
+    //}
 
     if (followup_name.filetype != "dir") {
         return history;
@@ -106,7 +106,7 @@ export function push_followup_history(history: History, followup_name: ElementIn
     if (!new_get_input.endsWith("\\")) {
         new_get_input += "\\";
     }
-    new_get_input += followup_name.name;
+    new_get_input = followup_name.path;
 
     return push_history(history, "filesystem", new_get_input, new_get_input);
 }
