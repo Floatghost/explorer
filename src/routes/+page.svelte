@@ -32,6 +32,7 @@
         show: boolean,
     } = { show: false };
 
+    // Das hier ist der Shadercode der die Schöne Demo Animation macht
     const shaderCode = `#version 300 es
     precision highp float;
 
@@ -72,6 +73,7 @@
     }
     `;
 
+    // das hier wird ausgeführt nachdem die Seite vollständig geladen ist
     onMount(async () => {
         isLoading = true;
         themeStore.init();
@@ -81,6 +83,7 @@
         await loadFiles();
     });
 
+    // diese funktion wird gebraucht um die Dokumente vom filesystem zu bekommen und laden
     async function loadFiles() {
         try {
             if (history.paths[history.index].get_function === "search") {
@@ -123,6 +126,7 @@
     }
 </script>
 
+<!-- Hier wird das Aussehen der App definiert -->
 {#if isLoading}
     <div class="fullscreen-loader">
         <WebGlShader
@@ -205,6 +209,7 @@
     </div>
 {/if}
 
+<!-- Hier werden den Oben definierten elementen noch farbe, grösse usw. zugeteilt -->
 <style>
     :root {
         width: 100%;
