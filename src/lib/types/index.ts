@@ -45,3 +45,11 @@ export interface Update {
     search: boolean,
     mainview: boolean,
 }
+
+export interface Pinned {
+    elements: ElementInfo[],
+}
+
+export const Pinned_empty: Pinned = {
+    elements: [],
+};

@@ -15,7 +15,7 @@
 </script>
 
 <div class="infobar-wrapper">
-    <div>
+    <div style="color: var(--text-unfocused);">
         dirs: {files.sub_dirs} | files: {files.sub_files}
     </div>
     <!-- <div>
