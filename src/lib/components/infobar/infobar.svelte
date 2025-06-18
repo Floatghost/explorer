@@ -18,9 +18,9 @@
     <div>
         dirs: {files.sub_dirs} | files: {files.sub_files}
     </div>
-    <div>
+    <!-- <div>
         {history.paths[history.index].get_function}: {history.paths[history.index].get_input}
-    </div>
+    </div> -->
     <div class="settings-container">
         {#if settings_info.show}
             <div class="settings-wrapper">

@@ -46,12 +46,20 @@
         document.getElementById(id)?.setAttribute("name", new_name);
     }
 
+
+    function get_file_icon(filetype: string): string {
+        if (filetype == "dir") {
+            return "mdi:folder";
+        } else {
+            return "mdi:file-document";
+        }
+    }
 </script>
 
 <div class="file-wrapper-not" id="file_wrapper">
     <button class="file-btn" on:click={() => {clicked = fileinfo; push_history(clicked)}} on:dblclick={() => {clicked = fileinfo}} >
         {#if fileicontype == "svg"}
-            <Icon width=100% icon={fileiconpath} height=auto />
+            <Icon width=100% icon={get_file_icon(fileinfo.filetype)} height=auto />
         {/if}
         <span class="tooltip">
             name: {fileinfo?.name}

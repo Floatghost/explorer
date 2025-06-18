@@ -1,6 +1,6 @@
 <script lang="ts">
     import { File, Contextmenu } from "$lib/components/mainview/index";
-    import type { DirInfo, ElementInfo, History, Update } from "$lib/types";
+    import type { DirInfo, ElementInfo, History, History_entry, Update } from "$lib/types";
     import { get_files, search, push_history, push_followup_history } from "$lib/utils";
     import { tick } from "svelte";
 
@@ -30,6 +30,20 @@
             await tick();
         };
         loadFiles();
+    }
+
+    $: if (update.search) {
+        history.paths.push({
+            get_function: "search",
+            get_input: searchTerm,
+            name_in_addressbar: "search for \"" + searchTerm + "\"",
+        });
+        history.index = history.paths.length-1;
+        update.search = false;
+        
+        (async () => {
+            loadFiles();
+        })();
     }
 
     async function loadFiles() {
