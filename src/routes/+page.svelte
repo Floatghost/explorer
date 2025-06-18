@@ -9,7 +9,7 @@
     import "$lib/app.css";
     import { onMount, tick } from 'svelte';
     import { themeStore } from "$lib/stores";
-    import type { DirInfo, History, Update } from "$lib/types";
+    import type { DirInfo, History, Update, ElementInfo } from "$lib/types";
     import { set_update, load_settings, search, get_files } from "$lib/utils";
     import { WebGlShader } from "svader";
 
@@ -31,6 +31,9 @@
     let settings_info: {
         show: boolean,
     } = { show: false };
+    let pinned: {
+        elements: ElementInfo[],
+    } = {elements: []};
 
     // Das hier ist der Shadercode der die Schöne Demo Animation macht
     const shaderCode = `#version 300 es
@@ -129,6 +132,7 @@
 <!-- Hier wird das Aussehen der App definiert -->
 {#if isLoading}
     <div class="fullscreen-loader">
+        <!-- this is from the svader lib -->
         <WebGlShader
             width="100vw"
             height="100vh"
@@ -173,7 +177,13 @@
         <div class="content-container">
             <!-- Sidebar -->
             <div class="sidebar" style="width: {sidebarWidth}px;">
-                <Sidebar />
+                <Sidebar
+                    bind:files
+                    bind:pinned
+                    bind:history
+                    bind:selectedFiles
+                    bind:update
+                />
             </div>
             <!-- Sidebar Resizer -->
             <div class="resizer" on:mousedown={() => startResize("sidebar")}></div>
