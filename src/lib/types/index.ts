@@ -44,6 +44,14 @@ export interface Update {
     get_files: boolean,
     search: boolean,
     mainview: boolean,
+    sidebar: boolean,
+}
+
+export const Update_false: Update = {
+    get_files: false,
+    mainview: false,
+    search: false,
+    sidebar: false,
 }
 
 export interface Pinned {

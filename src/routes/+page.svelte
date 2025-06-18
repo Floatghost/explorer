@@ -9,7 +9,7 @@
     import "$lib/app.css";
     import { onMount, tick } from 'svelte';
     import { themeStore } from "$lib/stores";
-    import type { DirInfo, History, Update, ElementInfo } from "$lib/types";
+    import { type DirInfo, type History, type Update, type ElementInfo, Update_false } from "$lib/types";
     import { set_update, load_settings, search, get_files } from "$lib/utils";
     import { WebGlShader } from "svader";
 
@@ -18,7 +18,7 @@
     let history: History = { paths: [{get_function:"filesystem", get_input:"C:\\", name_in_addressbar:"C:\\"}], index: 0 };
     let path: string = "C:\\";
     let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
-    let update: Update = {get_files: false, mainview: false, search: false};
+    let update: Update = Update_false;
 
     let sidebarWidth = 100;
     let previewWidth = 100;
@@ -81,9 +81,10 @@
         isLoading = true;
         themeStore.init();
         themeStore.setTheme("abyss");
-        update = {get_files: false, mainview: true, search: false};
+        update = Update_false;
         load_settings();
         await loadFiles();
+        update.sidebar = true;
     });
 
     // diese funktion wird gebraucht um die Dokumente vom filesystem zu bekommen und laden
@@ -182,7 +183,7 @@
                     bind:pinned
                     bind:history
                     bind:selectedFiles
-                    bind:update
+                    bind:update={update.sidebar}
                 />
             </div>
             <!-- Sidebar Resizer -->
@@ -241,7 +242,7 @@
         width: 80%;
         max-width: 800px;
         padding: 2em;
-        background-color: var(--accent-color, #fffff000);
+        background-color: var(--accent-color, #00000033);
         color: white;
         text-align: center;
         font-size: 1.2rem;
