@@ -21,7 +21,7 @@
     let fileicontype: string = "svg";
     let fileiconpath: string = "mdi:file-document";
     
-    export let selectedFiles: { selected: boolean, path: string }[] = []; // Tracks selected files
+    export let selectedFiles: { selected: boolean, el: ElementInfo }[]; // Tracks selected files
     let divRefs: { el: HTMLElement; id: number }[] = []; // Stores references with IDs
 
     //update files
@@ -73,9 +73,7 @@
             for(let i = 0; i < files.elements.length; i++) {
                 selectedFiles.push({
                     selected: false, 
-                    path: files.elements[i].name.startsWith("\\") ? 
-                        files.elements[i].name : 
-                        path + (path.endsWith("\\") ? "" : "\\") + files.elements[i].name
+                    el: files.elements[i]
                 });
             }
             selectedFiles = selectedFiles;
@@ -195,6 +193,16 @@
         //console.log(divRefs);
     }
 
+    function add_to_selected(id: number, el: ElementInfo) {
+        console.log("add_to_selected: " + id + " " + el);
+        selectedFiles.forEach(el => {
+            el.selected = false;
+        });
+        selectedFiles[id].selected = true;
+
+        selectedFiles = [...selectedFiles];
+    }
+
     //if (selectedFiles[0].selected !== undefined) {selectedFiles[0].selected = true}
 </script>
 
@@ -228,6 +236,7 @@
                     bind:history
                     bind:path
                     selected={selectedFiles[i]}
+                    on:click={() => add_to_selected(i, file)}
                 />
             </div>
         {/each}

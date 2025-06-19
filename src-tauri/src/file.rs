@@ -177,3 +177,7 @@ pub fn get_dir_info_ser(dir_path: String) -> String {
     serialize_data(&out)
 }
 
+#[tauri::command(rename_all = "snake_case")]
+pub fn get_file_content(path: String) -> String {
+
+}

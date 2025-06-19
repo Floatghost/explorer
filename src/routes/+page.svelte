@@ -20,10 +20,10 @@
     let files: DirInfo = { elements: [], name: "", sub_dirs: 0, sub_files: 0 };
     let update: Update = Update_false;
 
-    let sidebarWidth = 100;
-    let previewWidth = 100;
+    let sidebarWidth = 200;
+    let previewWidth = 300;
     let resizingTarget: "sidebar" | "preview" | null = null;
-    let selectedFiles: { selected: boolean, path: string }[];
+    let selectedFiles: { selected: boolean, el: ElementInfo }[];
     let contextmenu_info: {
         show: boolean,
         pos: {x: number, y: number},
@@ -98,7 +98,7 @@
                 console.error("Unknown get_function:", history.paths[history.index].get_function);
             }
             await tick(); // Ensure DOM updates before resetting selection
-            selectedFiles = files.elements.map(() => ({ selected: false, path: "" }));
+            selectedFiles = files.elements.map(element => ({ selected: false, el: element}));
         } catch (err) {
             console.error("Error fetching files:", err);
         }
@@ -158,7 +158,10 @@
                 </p>
                 <ul style="display: flex; flex-direction: column; align-items: center;">
                     <li>schnelle Suchfunktion</li>
-                    <li>kleine installations datei</li>
+                    <li>preview funktion</li>
+                    <li>sidebar</li>
+                    <li>reload button</li>
+                    <li>zur vorherigen seite zurück mit dem zurück button</li>
                 </ul>
             </center>
         </div>

@@ -101,3 +101,8 @@ fn get_file_extension(file_path: std::path::PathBuf) -> Option<String> {
         .and_then(|ext| ext.to_str()) // Convert OsStr to &str
         .map(|s| s.to_string()) // Convert &str to String
 }
+
+// #[tauri::command(rename_all = "snake_case")]
+// pub fn get_file_content(path: String) -> String {
+//     let data = fs::file
+// }
