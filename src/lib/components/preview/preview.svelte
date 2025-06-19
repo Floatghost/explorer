@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { convertFileSrc } from '@tauri-apps/api/core';
+    import { convertFileSrc, invoke } from '@tauri-apps/api/core';
     import { basename } from '@tauri-apps/api/path';
     import type { ElementInfo } from '$lib/types';
     import { size, readTextFile, BaseDirectory } from '@tauri-apps/plugin-fs';
@@ -20,17 +20,14 @@
             console.log("selectedFiles:", selected);
             // Read text content if it's a text file
         
-            if (file_extension(selectedFile.name) === "txt") {
-                readTextFile(selectedFile.path)
-                    .then(text => {
-                        textContent = text;
-                    })
-                    .catch(err => {
-                        textContent = `⚠️ Could not read file:\n${err}`;
-                    });
-            } else {
-                textContent = "";
-            }
+            (async () => {
+                if (file_extension(selectedFile.name) === "txt") {
+                    textContent = await invoke("get_file_content", {path: selectedFile.path}) as string;
+                } else {
+                    textContent = "";
+                }
+            })();
+            
         } else {
             textContent = "";
         }
@@ -52,7 +49,7 @@
         console.log("basename: " + selectedFile.name);
     }
 
-    const txt_formats: string[] = ["c", "cpp", "c++", "rs", "txt", "json", "csv", "go", "js", "ts", "toml"];
+    const txt_formats: string[] = ["c", "cpp", "c++", "rs", "txt", "json", "csv", "go", "js", "ts", "toml", "py"];
 
     function file_extension(path: string): string {
         let split = path.split(".");
@@ -179,8 +176,13 @@
         color: white;
     }
     .text_out {
+        height: fit-content;
+        width: 100%;
         margin-top: 10px;
         padding: 10px;
+        padding-bottom: 14px; /* extra space to avoid overlap */
+        padding-right: 14px;
+        box-sizing: border-box;
         background-color: var(--primary-color);
         border: 1px solid var(--border-color);
         border-radius: 5px;
@@ -188,9 +190,35 @@
         overflow-wrap: break-word;
         word-break: break-word;
         color: var(--text-color);
-        max-height: 400px;
-        overflow-y: auto;
+        max-height: calc(100% - 10px - 14px - 100px);
+        overflow: auto; /* enables both scrollbars */
         user-select: text;
+        font-family: "Fira Code", "Courier New", monospace;
+        font-size: 15px;
+        line-height: 1.5;
+        letter-spacing: 0.3px;
+        color: var(--text-unfocused);
+    }
+    .text_out:hover {
+        color: white;
+    }
+
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--primary-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--text-unfocused);
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-color);
     }
 
     .img_preview {
