@@ -3,7 +3,7 @@
 
 mod files;
 use files::read::get_dir_info;
-// use files::read::get_file_content;
+use files::read::get_file_content;
 mod search;
 use search::search;
 
@@ -20,7 +20,7 @@ pub fn run() {
             //dbg!(scope.is_allowed(r"D://"));
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![get_dir_info, search])
+        .invoke_handler(tauri::generate_handler![get_dir_info, search, get_file_content])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
