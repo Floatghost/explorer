@@ -8,7 +8,7 @@
         elements: ElementInfo[],
     };
     export let history: History;
-    export let selectedFiles: { selected: boolean, path: string }[] = []; // Tracks selected files
+    export let selectedFiles: { selected: boolean, el: ElementInfo }[] = []; // Tracks selected files
     export let update: boolean;
 
     let tree: Pinned = Pinned_empty;

@@ -3,6 +3,7 @@
 
 mod files;
 use files::read::get_dir_info;
+// use files::read::get_file_content;
 mod search;
 use search::search;
 

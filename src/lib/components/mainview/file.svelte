@@ -10,10 +10,7 @@
     export let fileinfo: ElementInfo;
     export let history: History;
     export let path: string;
-    export let selected: {
-        selected: boolean,
-        path: string,
-    };
+    export let selected: { selected: boolean, el: ElementInfo };
 
     function push_history(input: ElementInfo) {
         if (input.filetype === "dir") {
@@ -27,6 +24,7 @@
             console.log("history paths: " + history.paths);
             console.log("history index: " + history.index);
         }
+        selected.selected = true;
     }
 
     $: if (selected !== undefined) {
@@ -57,7 +55,7 @@
 </script>
 
 <div class="file-wrapper-not" id="file_wrapper">
-    <button class="file-btn" on:click={() => {clicked = fileinfo; push_history(clicked)}} on:dblclick={() => {clicked = fileinfo}} >
+    <button class="file-btn" on:dblclick={() => {clicked = fileinfo; push_history(clicked)}} on:click={() => {}} >
         {#if fileicontype == "svg"}
             <Icon width=100% icon={get_file_icon(fileinfo.filetype)} height=auto />
         {/if}
@@ -116,7 +114,7 @@
 
     /* Make tooltip visible on hover */
     .file-btn:hover .tooltip {
-        visibility: visible;
+        visibility: hidden; /*visible*/
         opacity: 1;
     }
     .file-wrapper:focus-visible {
