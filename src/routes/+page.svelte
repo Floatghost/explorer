@@ -80,7 +80,7 @@
     onMount(async () => {
         isLoading = true;
         themeStore.init();
-        themeStore.setTheme("dark1");
+        themeStore.setTheme("light1");
         update = Update_false;
         load_settings();
         await loadFiles();

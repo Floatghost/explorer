@@ -71,6 +71,20 @@ export const themes: Record<string, Theme> = {
             selected_color: "#A2AADB",
         },
     },
+    light1: {
+        name: "light1",
+        label: "light1",
+        colors: {
+            primary_color: "#fafafa",
+            secondary_color: "#e4e5f1",
+            border_color: "#484b6a",
+            border_color_light: "#7b81b6",
+            hover_color: "#d2d3db",
+            text_color: "#000000",
+            text_unfocused: "#505375",
+            selected_color: "#484b6a",
+        },
+    },
     dark1: {
         name: "dark1",
         label: "dark1",
