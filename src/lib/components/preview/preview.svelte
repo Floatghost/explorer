@@ -4,6 +4,14 @@
     import { basename } from '@tauri-apps/api/path';
     import type { ElementInfo } from '$lib/types';
     import { size, readTextFile, BaseDirectory } from '@tauri-apps/plugin-fs';
+    
+    //pdf.js may cause some large performance loss
+    // import * as pdfjsLib from 'pdfjs-dist';
+    // import pdfjsWorker from 'pdfjs-dist/build/pdf.worker?url';
+
+    //pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
+    let canvasEl: HTMLCanvasElement;
 
     export let selectedFiles: { selected: boolean, el: ElementInfo }[];
 
@@ -17,12 +25,14 @@
             updateName(selected[0].el.path);
             selectedFile.filetype = selected[0].el.filetype;
             selectedFile.size = selected[0].el.size;
-            console.log("selectedFiles:", selected);
+            //console.log("selectedFiles:", selected);
             // Read text content if it's a text file
         
             (async () => {
                 if (file_extension(selectedFile.name) === "txt") {
                     textContent = await invoke("get_file_content", {path: selectedFile.path}) as string;
+                } else if (file_extension(selectedFile.name) === "pdf") {
+                    // loadpdf(selectedFile.path);
                 } else {
                     textContent = "";
                 }
@@ -45,11 +55,11 @@
 
     async function updateName(path: string) {
         selectedFile.name = await basename(path);
-        console.log("path: " + path);
-        console.log("basename: " + selectedFile.name);
+        //console.log("path: " + path);
+        //console.log("basename: " + selectedFile.name);
     }
 
-    const txt_formats: string[] = ["c", "cpp", "c++", "rs", "txt", "json", "csv", "go", "js", "ts", "toml", "py"];
+    const txt_formats: string[] = ["c", "cpp", "c++", "rs", "txt", "json", "csv", "go", "js", "ts", "toml", "py", "md"];
 
     function file_extension(path: string): string {
         let split = path.split(".");
@@ -70,6 +80,24 @@
     onMount(() => {
         
     });
+
+    // async function loadpdf(pdfPath: string) {
+    //     const loadingTask = pdfjsLib.getDocument(pdfPath);
+    //     const pdf = await loadingTask.promise;
+    //     const page = await pdf.getPage(1);
+    //     const viewport = page.getViewport({ scale: 1.5 });
+    //     const canvas = canvasEl;
+    //     const context = canvas.getContext('2d')!;
+    //     canvas.height = viewport.height;
+    //     canvas.width = viewport.width;
+
+    //     const renderContext = {
+    //         canvasContext: context,
+    //         viewport: viewport
+    //     };
+
+    //     await page.render(renderContext).promise;
+    // }
 </script>
 
 <div class="preview-wrapper">
@@ -107,8 +135,9 @@
     {#if file_extension(selectedFile.name) == "pdf"}
         <div class="extension-wrapper">
             <div class="name">
-                pdf
+                {selectedFile.name}
             </div>
+            <!-- <canvas bind:this={canvasEl}></canvas> -->
             <div class="info">
                     size: {get_size_str(selectedFile.size)}
                     <br>
@@ -173,7 +202,7 @@
         color: var(--text-unfocused);
     }
     .name:hover {
-        color: white;
+        color: var(--text_color);
     }
     .text_out {
         height: fit-content;
@@ -200,7 +229,7 @@
         color: var(--text-unfocused);
     }
     .text_out:hover {
-        color: white;
+        color: var(--text_color);
     }
 
     ::-webkit-scrollbar {
@@ -245,7 +274,7 @@
     }
 
     .info:hover {
-        color: white;
+        color: var(--text_color);
     }
 
 </style>

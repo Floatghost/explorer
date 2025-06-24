@@ -151,7 +151,7 @@
     .file-btn:hover {
         border-color: var(--selected-color);
         color: var(--text-color);
-        background-color: #272e4f;
+        background-color: var(--hover_color); /*#272e4f*/
     }
     .file-btn:focus {
         color: var(--text-color);

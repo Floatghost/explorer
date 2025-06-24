@@ -109,6 +109,6 @@
     }
     .folder:hover {
         border: 1px solid var(--border-color);
-        color: white;
+        color: var(--text_color);
     }
 </style>
