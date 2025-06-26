@@ -36,3 +36,7 @@ npm install svelte-i18n
 <span style="color:red font-size:large"> BEFORE RELEASE </span>.
 - remove devtools feature flag for tauri in cargo.toml
 - https://v2.tauri.app/plugin/store/ for store
+
+
+# BUG
+- when entering address in addressbar it uses search "" instead of opening the right dir

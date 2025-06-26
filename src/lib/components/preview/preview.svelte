@@ -153,6 +153,7 @@
                 {selectedFile.name}
             </div>
             <center>
+                
                 <img class="img_preview" src={convertFileSrc(selectedFile.path)} alt="preview" style="width: 90%;">
             </center>
             <div class="info">
@@ -178,6 +179,7 @@
         flex-direction: column;
         justify-content: center;
         gap: 10px;
+        overflow-y: scroll;
     }
     .preview-wrapper:hover {
         border-color: var(--selected-color);
@@ -270,7 +272,7 @@
         white-space: normal;            /* allow multi-line */
         overflow-wrap: break-word;      /* break long words */
         word-break: break-word;         /* fallback for very long tokens */
-        user-select: none;
+        user-select: text;
     }
 
     .info:hover {

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
+    //import { store } from '$lib/stores/counter';
 
 
 </script>

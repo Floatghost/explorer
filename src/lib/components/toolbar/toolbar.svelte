@@ -18,7 +18,7 @@
         <div class="seperator"></div>
         <div class="searchboxes-container">
             <div class="address-container">
-                <SearchBox width={400} bind:searchTerm={adress} bind:update={update.search} placeholder="Path" />
+                <SearchBox width={400} bind:searchTerm={adress} bind:update={update.path} placeholder="Path" />
             </div>
             <div class="search-container">
                 <Searchbox bind:searchTerm bind:update={update.search} placeholder="Search" />    

@@ -26,7 +26,7 @@ fn search_everything(query: String, max_elements: u32) -> DirInfo {
     let mut out: DirInfo = DirInfo::default();
     out.name = "Search".to_string();
 
-    // example @ https://github.com/owtotwo/everything-sdk-rs/blob/main/examples/readme.rs
+    // example at https://github.com/owtotwo/everything-sdk-rs/blob/main/examples/readme.rs
 
     let mut everything = global().try_lock().unwrap();
 
@@ -49,7 +49,7 @@ fn search_everything(query: String, max_elements: u32) -> DirInfo {
                         | RequestFlags::EVERYTHING_REQUEST_PATH
                         | RequestFlags::EVERYTHING_REQUEST_SIZE
                         | RequestFlags::EVERYTHING_REQUEST_ATTRIBUTES
-                        // file attributes can be found @ https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants
+                        // file attributes can be found at https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants
                         | RequestFlags::EVERYTHING_REQUEST_RUN_COUNT,
                 )
                 .set_max(max_elements)

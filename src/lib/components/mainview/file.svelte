@@ -3,7 +3,10 @@
     import "$lib/app.css"
     import type { ElementInfo, History } from "$lib/types";
     import {formatBytes, delete_all_history_above, push_followup_history, removefocus, addfocus} from "$lib/utils/index";
-    
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher();
+
     export let fileicontype: string;
     export let fileiconpath: string;
     export let clicked: ElementInfo | null;
@@ -55,7 +58,16 @@
 </script>
 
 <div class="file-wrapper-not" id="file_wrapper">
-    <button class="file-btn" on:dblclick={() => {clicked = fileinfo; push_history(clicked)}} on:click={() => {}} >
+    <button
+        class="file-btn"
+        on:click={() => {
+            dispatch('clicked');
+        }}
+        on:dblclick={() => {
+            clicked = fileinfo;
+            push_history(clicked);
+        }}
+    >
         {#if fileicontype == "svg"}
             <Icon width=100% icon={get_file_icon(fileinfo.filetype)} height=auto />
         {/if}

@@ -33,6 +33,19 @@
         //update.sidebar = true; // for some reason long loop loading folders over and over agin in sidebar
     }
 
+    $: if (update.path) {
+        update.path = false;
+        history.paths.push({
+            get_function: "filesystem",
+            get_input: path,
+            name_in_addressbar: path,
+        });
+        history.index = history.paths.length-1;
+        (async () => {
+            loadFiles();
+        })();
+    }
+
     $: if (update.sidebar) {
         update.sidebar = false;
         (async () => {
@@ -236,7 +249,7 @@
                     bind:history
                     bind:path
                     selected={selectedFiles[i]}
-                    on:click={() => add_to_selected(i, file)}
+                    on:clicked={() => add_to_selected(i, file)}
                 />
             </div>
         {/each}

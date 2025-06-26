@@ -45,6 +45,7 @@ export interface Update {
     search: boolean,
     mainview: boolean,
     sidebar: boolean,
+    path: boolean,
 }
 
 export const Update_false: Update = {
@@ -52,6 +53,7 @@ export const Update_false: Update = {
     mainview: false,
     search: false,
     sidebar: false,
+    path: false,
 }
 
 export interface Pinned {
