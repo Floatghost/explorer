@@ -1,6 +1,6 @@
 [package]
 name = "fileexplorer"
-version = "0.1.0"
+version = "1.0.0"
 description = "an file explorer from win"
 authors = ["you"]
 edition = "2021"
